@@ -25,6 +25,10 @@ Route::group([
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('admin');
+
+    Route::get('/posts', function () {
+        return true;
+    })->name('admin.posts');
 });
 
 
