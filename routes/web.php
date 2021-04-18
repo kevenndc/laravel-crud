@@ -18,13 +18,12 @@ Route::get('/', function () {
 });
 
 Route::group([
-        'prefix' => 'admin',
-        'name' => 'admin.' ,
-        'middleware' => ['auth', 'verified']
-    ], function () {
-
+    'prefix' => 'admin',
+    'name' => 'admin.' ,
+    'middleware' => ['auth', 'verified']
+], function () {
     Route::get('/', function () {
-        return view('admin');
+        return view('admin.dashboard');
     })->name('admin');
 });
 
