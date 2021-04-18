@@ -17,8 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::group(['prefix' => 'admin', 'name' => 'admin.' , 'middleware' => ['auth', 'verified']], function () {
+    Route::get('/', function () {
+        return view('admin');
+    })->name('admin');
+
+
+});
+
+
 
 require __DIR__.'/auth.php';
