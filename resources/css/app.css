@@ -2,3 +2,10 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.side-menu-item {
+    @apply my-2 rounded-lg text-gray-300 duration-200 hover:bg-gray-800 hover:text-white;
+}
+.side-menu-item.active {
+    @apply bg-gray-800 text-white;
+}
