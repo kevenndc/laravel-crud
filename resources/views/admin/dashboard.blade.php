@@ -6,12 +6,8 @@
     </x-slot>
 
     <div class="flex">
-        <nav class="w-1/5">
-            @include('layouts.admin-side-menu')
-        </nav>
-        <div class="w-4/5">
-            @include('layouts.navigation')
-        </div>
+        @include('layouts.admin-side-menu')
+        @include('layouts.navigation')
     </div>
 
 </x-app-layout>
