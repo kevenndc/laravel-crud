@@ -17,19 +17,27 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group([
+/*Route::group([
     'prefix' => 'admin',
     'name' => 'admin.' ,
     'middleware' => ['auth', 'verified']
 ], function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('admin');
 
-    Route::get('/posts', function () {
-        return true;
-    })->name('admin.posts');
-});
+});*/
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::get('/', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
+
+        Route::get('/posts', function () {
+            return true;
+        })->name('posts');
+    }
+);
 
 
 
