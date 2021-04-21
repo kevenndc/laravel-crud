@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             $table->longText('content');
             $table->text('excerpt');
             $table->boolean('is_featured')->default(false);
-            $table->string('featured_image');
+            $table->string('featured_image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

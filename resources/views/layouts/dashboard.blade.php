@@ -10,8 +10,14 @@
         </div>
         <div class="w-4/5">
             @include('layouts.navigation')
-            @section('content')
-                @show
+            <div class="max-h-screen p-12 overflow-y-scroll">
+                <div class="pb-12">
+                    @section('content')
+                        @show
+                </div>
+
+            </div>
+
         </div>
     </div>
 @endsection
