@@ -1,7 +1,8 @@
 @extends('layouts.app')
-@section('title', 'Dashboard')
+@section('title')
+    @yield('title', 'Dashboard')
+@endsection
 
-<!-- Page Content -->
 @section('dashboard')
     <div class="flex">
         <div class="w-1/5">

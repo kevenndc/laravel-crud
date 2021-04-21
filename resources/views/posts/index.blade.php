@@ -1,4 +1,5 @@
 @extends('layouts.dashboard')
+@section('title', 'Posts')
 
 @section('content')
     <ul>
