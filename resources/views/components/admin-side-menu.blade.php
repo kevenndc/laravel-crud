@@ -1,4 +1,4 @@
-<div class="w-1/5 h-screen bg-gray-700">
+<div class="h-screen bg-gray-700">
     <div class="bg-gray-800">
         <!-- Logo -->
         <div class="flex-shrink-0 flex items-center">

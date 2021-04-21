@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +31,17 @@ Route::prefix('admin')
     ->middleware(['auth', 'verified'])
     ->group(function () {
         Route::get('/', function () {
-            return view('admin.dashboard');
+            return view('layouts.dashboard');
         })->name('dashboard');
 
-        Route::get('/posts', function () {
-            return true;
-        })->name('posts');
+        Route::resource('posts', PostController::class, [
+           'names' => [
+               'index' => 'posts',
+               'create' => 'posts.new',
+               'show' => 'posts.show',
+               'update' => 'posts.update',
+           ]
+        ]);
     }
 );
 
