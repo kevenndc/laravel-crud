@@ -40,6 +40,8 @@ Route::prefix('admin')
                'create' => 'posts.new',
                'show' => 'posts.show',
                'update' => 'posts.update',
+               'edit' => 'posts.edit',
+               'destroy' => 'posts.delete',
            ]
         ]);
     }
