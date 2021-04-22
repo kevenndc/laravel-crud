@@ -15,8 +15,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
-        return view('posts.index', ['posts' => $posts]);
+        $query = \request()->query();
+        if (empty($query)) {
+            $posts = Post::all();
+        } else {
+            $posts = $this->getPostsWithQuery($query);
+        }
+        extract(Post::getCounts());
+        return view('posts.index', compact(['posts', 'postCount', 'publishedCount', 'draftCount', 'trashedCount']));
     }
 
     /**
@@ -82,6 +88,36 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Post::destroy($id);
+        return redirect()->route('admin.posts');
+    }
+
+    /**
+     * Display a listing of the trashed resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function trashIndex()
+    {
+        $posts = Post::onlyTrashed()->get();
+        return view('posts.index', ['posts' => $posts]);
+    }
+
+    /**
+     * Get posts with query strings.
+     * @param array $query
+     * @return Post[]
+     */
+    private function getPostsWithQuery(array $query)
+    {
+        if (isset($query['trashed'])) {
+            return Post::onlyTrashed()->get();
+        }
+
+        if (isset($query['published'])) {
+            return Post::where('published', $query['published'])->get();
+        }
+
+        return [];
     }
 }

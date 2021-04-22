@@ -34,6 +34,7 @@ Route::prefix('admin')
             return view('layouts.dashboard');
         })->name('dashboard');
 
+        Route::get('/posts/trash', [PostController::class, 'trashIndex'])->name('posts.trash');
         Route::resource('posts', PostController::class, [
            'names' => [
                'index' => 'posts',
