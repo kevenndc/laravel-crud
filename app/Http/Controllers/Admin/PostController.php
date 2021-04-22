@@ -16,13 +16,10 @@ class PostController extends Controller
     public function index()
     {
         $query = \request()->query();
-        if (empty($query)) {
+        if (empty($posts = $this->getPostsWithQuery($query))) {
             $posts = Post::all();
-        } else {
-            $posts = $this->getPostsWithQuery($query);
         }
-        extract(Post::getCounts());
-        return view('posts.index', compact(['posts', 'postCount', 'publishedCount', 'draftCount', 'trashedCount']));
+        return view('posts.index', ['posts' => $posts, 'counts' => Post::getCounts()]);
     }
 
     /**
@@ -52,7 +49,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
         //
     }
@@ -63,9 +60,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        dd($id);
+        dd($post);
     }
 
     /**
@@ -75,7 +72,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
         //
     }
@@ -86,9 +83,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        Post::destroy($id);
+        $post->delete();
         return redirect()->route('admin.posts');
     }
 
@@ -113,11 +110,9 @@ class PostController extends Controller
         if (isset($query['trashed'])) {
             return Post::onlyTrashed()->get();
         }
-
         if (isset($query['published'])) {
-            return Post::where('published', $query['published'])->get();
+            return Post::where('published', $query['published'] != 0)->get();
         }
-
         return [];
     }
 }

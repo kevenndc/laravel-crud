@@ -5,10 +5,10 @@
     <h1 class="text-2xl text-gray-900 font-bold">Posts</h1>
     {{--    --}}
     <div>
-        <a href="{{ route('admin.posts') }}" class="text-blue-400 text-sm">All ({{ $postCount }})</a>
-        <a href="{{ route('admin.posts', 'published=1') }}" class="text-blue-400 text-sm">Published ({{ $publishedCount }})</a>
-        <a href="{{ route('admin.posts', 'published=0') }}" class="text-blue-400 text-sm">Drafts ({{ $draftCount }})</a>
-        <a href="{{ route('admin.posts', 'trashed=1') }}" class="text-red-500 text-sm">Trash ({{ $trashedCount }})</a>
+        <a href="{{ route('admin.posts.index') }}" class="text-blue-400 text-sm">All ({{ $counts['posts'] }})</a>
+        <a href="{{ route('admin.posts.index', 'published=1') }}" class="text-blue-400 text-sm">Published ({{ $counts['published'] }})</a>
+        <a href="{{ route('admin.posts.index', 'published=0') }}" class="text-blue-400 text-sm">Drafts ({{ $counts['drafts'] }})</a>
+        <a href="{{ route('admin.posts.index', 'trashed=1') }}" class="text-red-500 text-sm">Trash ({{ $counts['trashed'] }})</a>
     </div>
 
     {{--  Post List  --}}
@@ -24,7 +24,7 @@
                             <a href="{{ route('admin.posts.edit', $post->id) }}" class="text-blue-400"><x-heroicon-o-pencil-alt class="w-5 inline-block" /> Edit</a>
                         </div>
                         <div class="flex">
-                            <form action="{{ route('admin.posts.delete', $post->id) }}" method="POST" class="flex">
+                            <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class="flex">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="id" value="{{ $post->id }}">

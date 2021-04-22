@@ -12,7 +12,7 @@
         <x-side-menu-item route='admin.dashboard' title='Dashboard'>
             <x-heroicon-o-home/>
         </x-side-menu-item>
-        <x-side-menu-item route='admin.posts' title='Posts'>
+        <x-side-menu-item route='admin.posts.index' title='Posts'>
             <x-heroicon-o-newspaper />
         </x-side-menu-item>
     </ul>

@@ -38,11 +38,11 @@ class Post extends Model
      * @return array
      */
     public static function getCounts() {
-        return [
-            'postCount' => self::all()->count(),
-            'publishedCount' => self::where('published', 1)->count(),
-            'draftCount' => self::where('published', 0)->count(),
-            'trashedCount' => self::onlyTrashed()->count(),
-        ];
+        return collect([
+            'posts' => self::all()->count(),
+            'published' => self::where('published', 1)->count(),
+            'drafts' => self::where('published', 0)->count(),
+            'trashed' => self::onlyTrashed()->count(),
+        ]);
     }
 }
