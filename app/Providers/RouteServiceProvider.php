@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+
+use App\Models\Post;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -46,6 +48,11 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+
+            // binds a post to its id and returns a Post Model to the controller
+            Route::bind('post', function($id) {
+                return Post::withTrashed()->findOrFail($id);
+            });
         });
     }
 

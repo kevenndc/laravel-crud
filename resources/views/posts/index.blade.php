@@ -21,13 +21,14 @@
                     </div>
                     <div class="flex w-1/4 justify-end">
                         <div class="mr-6">
-                            <a href="{{ route('admin.posts.edit', $post->id) }}" class="text-blue-400"><x-heroicon-o-pencil-alt class="w-5 inline-block" /> Edit</a>
+                            <a href="{{ route('admin.posts.edit', $post) }}" class="text-blue-400"><x-heroicon-o-pencil-alt class="w-5 inline-block" /> Edit</a>
                         </div>
                         <div class="flex">
-                            <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class="flex">
-                                @csrf
+                            <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="flex">
                                 @method('DELETE')
-                                <input type="hidden" name="id" value="{{ $post->id }}">
+                                @csrf
+
+                                <input type="hidden" name="id" value="{{ $post }}">
                                 <button type="submit" class="text-red-500"><x-heroicon-o-trash class="w-5 inline-block" /> Delete</button>
                             </form>
                         </div>

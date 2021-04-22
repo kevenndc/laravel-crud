@@ -40,7 +40,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
@@ -51,7 +51,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        dd($post);
     }
 
     /**
@@ -85,8 +85,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
-        return redirect()->route('admin.posts');
+        dd($post);
+        if (! $post->forceDelete()) {
+            $post->delete();
+        }
+
+        return back();
     }
 
     /**
@@ -111,7 +115,9 @@ class PostController extends Controller
             return Post::onlyTrashed()->get();
         }
         if (isset($query['published'])) {
-            return Post::where('published', $query['published'] != 0)->get();
+            // return published posts to any non-zero value of 'published' query
+            $published = ((int) $query['published']) !== 0;
+            return Post::where('published', $published)->get();
         }
         return [];
     }
