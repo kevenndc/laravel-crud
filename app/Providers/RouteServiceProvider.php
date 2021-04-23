@@ -49,7 +49,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
 
-            // binds a post to its id and returns a Post Model to the controller
+            // binds post parameter to a Post id and returns a Post Model to the controller.
+            // this explicit binding is necessary for updating and deleting trashed posts.
             Route::bind('post', function($id) {
                 return Post::withTrashed()->findOrFail($id);
             });

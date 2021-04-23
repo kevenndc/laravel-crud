@@ -15,9 +15,7 @@
                     @section('content')
                         @show
                 </div>
-
             </div>
-
         </div>
     </div>
 @endsection

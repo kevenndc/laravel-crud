@@ -29,7 +29,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.new');
     }
 
     /**
@@ -85,23 +85,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        dd($post);
-        if (! $post->forceDelete()) {
+        if ($post->trashed()) {
+            $post->forceDelete();
+        } else {
             $post->delete();
         }
-
         return back();
-    }
-
-    /**
-     * Display a listing of the trashed resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function trashIndex()
-    {
-        $posts = Post::onlyTrashed()->get();
-        return view('posts.index', ['posts' => $posts]);
     }
 
     /**
