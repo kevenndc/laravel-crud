@@ -5,12 +5,12 @@
 
 @section('dashboard')
     <div class="flex">
-        <div class="w-1/5">
+        <div class="w-1/6 min-w-min max-w-200">
             @include('components.admin-side-menu')
         </div>
-        <div class="w-4/5">
+        <div class="w-full">
             @include('layouts.navigation')
-            <div class="max-h-screen p-12 overflow-y-scroll">
+            <div class="max-h-screen p-12 overflow-y-auto">
                 <div class="pb-12">
                     @section('content')
                         @show
