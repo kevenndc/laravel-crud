@@ -7,9 +7,9 @@
         @csrf
         <div class="flex">
             <div class="w-full bg-white rounded-lg p-4 mr-6 shadow-md">
-                <input type="text" name="post-title" placeholder="Post title" class="block mb-4 w-full rounded-md" required>
-                <textarea name="post-content" placeholder="Post content" class="block mb-4 w-full h-96 resize-none rounded-md"></textarea>
-                <textarea name="post-excerpt" placeholder="Post excerpt" class="block w-full h-40 resize-none rounded-md"></textarea>
+                <input type="text" name="title" placeholder="Post title" class="block mb-4 w-full rounded-md" required>
+                <textarea name="content" placeholder="Post content" class="block mb-4 w-full h-96 resize-none rounded-md"></textarea>
+                <textarea name="excerpt" placeholder="Post excerpt" class="block w-full h-40 resize-none rounded-md"></textarea>
             </div>
             <div class="w-2/6 max-w-300 flex flex-col bg-white rounded-lg p-4 shadow-md">
                 <div class="flex flex-col items-center mb-5">
@@ -21,7 +21,7 @@
                     </button>
                 </div>
                 <x-image-input name="featured_image" label="Select a featured image" class="block w-full" />
-                <input type="checkbox" name="is-featured">
+                <input type="checkbox" name="is_featured">
             </div>
         </div>
     </form>
