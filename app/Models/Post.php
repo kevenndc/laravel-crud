@@ -35,7 +35,7 @@ class Post extends Model
     /**
      * Get the total number of posts and the number of posts for each status (published, draft, trashed).
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public static function getCounts() {
         return collect([

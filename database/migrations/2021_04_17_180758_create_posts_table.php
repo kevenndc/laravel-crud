@@ -18,8 +18,8 @@ class CreatePostsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
-            $table->longText('content');
-            $table->text('excerpt');
+            $table->longText('content')->nullable();
+            $table->text('excerpt')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->string('featured_image')->nullable();
             $table->timestamps();
