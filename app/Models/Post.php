@@ -33,16 +33,59 @@ class Post extends Model
     }
 
     /**
+     * Handles the insertion of the slug attribute.
+     * @param string $value
+     */
+    public function setSlugAttribute(string $value)
+    {
+        if (static::whereSlug($value)->exists()) {
+            $slug = $this->incrementSlug($value);
+        }
+        $this->attributes['slug'] = $slug;
+    }
+
+    /**
+     * Increment a number to the final of the slug until it is unique.
+     *
+     * @param $slug
+     * @return string
+     */
+    private function incrementSlug($slug)
+    {
+        $relatedSlugs = $this->getRelatedSlugs($slug);
+        $i = 2;
+        do {
+            $newSlug = $slug . '-' . $i++;
+        } while (in_array($newSlug, $relatedSlugs));
+
+        return $newSlug;
+    }
+
+    /**
+     * Retrieves all the slugs like the the on passed as argument.
+     *
+     * @param $slug
+     * @return array
+     */
+    private function getRelatedSlugs($slug)
+    {
+        return static::where('slug', 'LIKE', "{$slug}%")
+                        ->where('id', '<>', $this->id)
+                        ->pluck('slug')
+                        ->toArray();
+    }
+
+    /**
      * Get the total number of posts and the number of posts for each status (published, draft, trashed).
      *
      * @return \Illuminate\Support\Collection
      */
     public static function getCounts() {
         return collect([
-            'posts' => self::all()->count(),
-            'published' => self::where('published', 1)->count(),
-            'drafts' => self::where('published', 0)->count(),
-            'trashed' => self::onlyTrashed()->count(),
+            'posts' => static::all()->count(),
+            'published' => static::where('published', 1)->count(),
+            'drafts' => static::where('published', 0)->count(),
+            'trashed' => static::onlyTrashed()->count(),
         ]);
     }
 }

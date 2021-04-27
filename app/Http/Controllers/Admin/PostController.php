@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -37,16 +37,13 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  PostRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(PostRequest $request)
     {
         $validated = $request->all();
         Auth::user()->posts()->create($validated);
-//        $post = new Post($validated);
-//        $post->user_id = auth()->id();
-//        $post->save();
     }
 
     /**
@@ -75,7 +72,7 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Post  $post
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Post $post)
@@ -86,7 +83,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Post $post
      * @return \Illuminate\Http\Response
      */
     public function destroy(Post $post)
