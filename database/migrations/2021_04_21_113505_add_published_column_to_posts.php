@@ -15,6 +15,7 @@ class AddPublishedColumnToPosts extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             $table->boolean('published')->default(false)->after('excerpt');
+            $table->dateTime('published_at')->nullable()->after('created_at');
         });
     }
 
@@ -27,6 +28,7 @@ class AddPublishedColumnToPosts extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             $table->dropColumn('published');
+            $table->dropColumn('published_at');
         });
     }
 }

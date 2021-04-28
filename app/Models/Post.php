@@ -19,6 +19,7 @@ class Post extends Model
         'excerpt',
         'is_featured',
         'featured_image',
+        'published',
     ];
     // the author of the post
 
@@ -42,6 +43,29 @@ class Post extends Model
             $value = $this->incrementSlug($value);
         }
         $this->attributes['slug'] = $value;
+    }
+
+    /**
+     * Handles the publishing of a post by also setting the published date.
+     *
+     * @param bool $value
+     */
+    public function setPublishedAttribute(bool $value)
+    {
+        $this->attributes['published'] = $value;
+        $this->setPublishedAtAttribute($value);
+    }
+
+    /**
+     * Sets the published date at the first time that the post is published.
+     *
+     * @param $value
+     */
+    public function setPublishedAtAttribute($value)
+    {
+        if ($value && !isset($this->published_at)) {
+            $this->attributes['published_at'] = now();
+        }
     }
 
     /**

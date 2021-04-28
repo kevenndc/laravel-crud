@@ -45,7 +45,9 @@
                     </td>
                     <td class="py-4">
                         <a href="#">{{ Str::limit($post->title, 100, '...') }}</a>
-                        <span> -  {{ $post->published }}</span>
+                        @if(! $post->published)
+                            <span class="text-gray-400"> - draft</span>
+                        @endif
                     </td>
                     <td class="py-4 text-center">
                         <a href="#">{{ $post->user->name }}</a>

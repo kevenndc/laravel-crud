@@ -22,8 +22,10 @@ class PostRequest extends FormRequest
         // if the post is being created, then use the title to generate a slug.
         // if it is an update, then use the existing slug.
         $slug = $this->slug ?? $this->title;
+        $published = $this->save === 'publish';
         $this->merge([
             'slug' => Str::slug($slug),
+            'published' => $published,
         ]);
     }
 
@@ -41,6 +43,7 @@ class PostRequest extends FormRequest
             'excerpt' => 'string|nullable',
             'is_featured' => 'boolean',
             'featured_image' => 'nullable|file|image|mimes:jpg,jpeg,png,webp,bmp',
+            'published' => 'boolean',
         ];
     }
 

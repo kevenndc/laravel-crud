@@ -46,7 +46,7 @@ class PostController extends Controller
     {
         $validated = $request->validated();
         $post = Auth::user()->posts()->create($validated);
-        dd($post);
+        return redirect()->route('admin.posts.index');
     }
 
     /**
