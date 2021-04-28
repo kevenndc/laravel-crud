@@ -53,7 +53,7 @@ class PostRequest extends FormRequest
     {
         return [
             'title.required' => 'A title is required.',
-            'content.required' => 'The post content is required to publish.',
+            'content.required_unless' => 'The post content is required to publish.',
         ];
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use Ramsey\Collection\Collection;
 
 class PostController extends Controller
 {
@@ -15,12 +16,13 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $query = \request()->query();
-        if (empty($posts = $this->getPostsWithQuery($query))) {
+        $filter = $request->get('filter');
+        if (empty($posts = $this->getFilteredPosts($filter))) {
             $posts = Post::all();
         }
+        $posts = $this->getOrderedPosts($posts);
         return view('posts.index', ['posts' => $posts, 'counts' => Post::getCounts()]);
     }
 
@@ -42,8 +44,9 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $validated = $request->all();
-        Auth::user()->posts()->create($validated);
+        $validated = $request->validated();
+        $post = Auth::user()->posts()->create($validated);
+        dd($post);
     }
 
     /**
@@ -101,16 +104,27 @@ class PostController extends Controller
      * @param array $query
      * @return Post[]
      */
-    private function getPostsWithQuery(array $query)
+    private function getFilteredPosts($filter)
     {
-        if (isset($query['trashed'])) {
-            return Post::onlyTrashed()->get();
+        switch ($filter) {
+            case 'trashed':
+                return Post::onlyTrashed()->get();
+            case 'published':
+                return Post::where('published', true)->get();
+            case 'drafts':
+                return Post::where('published', false)->get();
+            default:
+                return [];
         }
-        if (isset($query['published'])) {
-            // return published posts to any non-zero value of 'published' query
-            $published = ((int) $query['published']) !== 0;
-            return Post::where('published', $published)->get();
+    }
+
+    private function getOrderedPosts(\Illuminate\Support\Collection $posts)
+    {
+        $column = \request()->get('orderby');
+        if (! isset($column)) {
+            return $posts->sortByDesc('created_at');
         }
-        return [];
+        $order = \request()->get('order');
+        return $posts->sortBy([$column, $order]);
     }
 }

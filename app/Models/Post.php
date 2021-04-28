@@ -34,14 +34,19 @@ class Post extends Model
 
     /**
      * Handles the insertion of the slug attribute.
-     * @param string $value
+     * @param string $value The slug of the post.
      */
     public function setSlugAttribute(string $value)
     {
         if (static::whereSlug($value)->exists()) {
-            $slug = $this->incrementSlug($value);
+            $value = $this->incrementSlug($value);
         }
-        $this->attributes['slug'] = $slug;
+        $this->attributes['slug'] = $value;
+    }
+
+    public function getPublishedAttribute($value)
+    {
+        return $value == true ? 'Published' : 'Draft';
     }
 
     /**
@@ -61,13 +66,14 @@ class Post extends Model
         return $newSlug;
     }
 
+
     /**
      * Retrieves all the slugs like the the on passed as argument.
      *
      * @param $slug
      * @return array
      */
-    private function getRelatedSlugs($slug)
+    public function getRelatedSlugs($slug)
     {
         return static::where('slug', 'LIKE', "{$slug}%")
                         ->where('id', '<>', $this->id)

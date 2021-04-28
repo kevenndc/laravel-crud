@@ -8,9 +8,9 @@
         {{-- Filters --}}
         <div>
             <a href="{{ route('admin.posts.index') }}" class="text-blue-400 text-sm mr-2">All ({{ $counts['posts'] }})</a>
-            <a href="{{ route('admin.posts.index', 'published=1') }}" class="text-blue-400 text-sm mr-2">Published ({{ $counts['published'] }})</a>
-            <a href="{{ route('admin.posts.index', 'published=0') }}" class="text-blue-400 text-sm mr-2">Drafts ({{ $counts['drafts'] }})</a>
-            <a href="{{ route('admin.posts.index', 'trashed=1') }}" class="text-red-500 text-sm">Trash ({{ $counts['trashed'] }})</a>
+            <a href="{{ route('admin.posts.index', [ 'filter' => 'published']) }}" class="text-blue-400 text-sm mr-2">Published ({{ $counts['published'] }})</a>
+            <a href="{{ route('admin.posts.index', ['filter' => 'drafts']) }}" class="text-blue-400 text-sm mr-2">Drafts ({{ $counts['drafts'] }})</a>
+            <a href="{{ route('admin.posts.index', ['filter' => 'trashed']) }}" class="text-red-500 text-sm">Trash ({{ $counts['trashed'] }})</a>
         </div>
         <div>
             <a href="{{ route('admin.posts.create') }}" class="py-2 px-4 font-bold flex items-center text-white bg-blue-500 rounded-lg shadow-md duration-200 hover:bg-blue-600">
@@ -22,29 +22,61 @@
 
     {{--  Post List  --}}
     <div class="bg-white rounded-lg p-4 shadow-md">
-            @forelse($posts as $post)
-                <div class="flex justify-between py-4 border-b border-gray-300 last:border-b-0">
-                    <div class="w-3/4">
-                        <input type="checkbox">
-                        <a href="#">{{ $post->title }}</a>
-                    </div>
-                    <div class="flex w-1/4 justify-end">
-                        <div class="mr-6">
-                            <a href="{{ route('admin.posts.edit', $post) }}" class="text-blue-400"><x-heroicon-o-pencil-alt class="w-5 inline-block" /> Edit</a>
-                        </div>
-                        <div class="flex">
-                            <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="flex">
-                                @method('DELETE')
-                                @csrf
+        @if($posts->isNotEmpty())
+        <table class="w-full">
+            <thead>
+                <x-sortable-th
+                    route="admin.posts.index"
+                    column="id"
+                >
+                    ID
+                </x-sortable-th>
+                <x-sortable-th
+                    route="admin.posts.index"
+                    column="title"
+                    class="text-left"
+                >
+                    Title
+                </x-sortable-th>
+                <th>Author</th>
+                <th>Options</th>
+            </thead>
+            <tbody>
+            @foreach($posts as $post)
+                <tr class="w-full border-b border-gray-300 last:border-b-0">
+                    <td class="py-4">
+                        <span>{{ $post->id }}</span>
+                    </td>
+                    <td class="py-4">
+                        <a href="#">{{ Str::limit($post->title, 100, '...') }}</a>
+                        <span> -  {{ $post->published }}</span>
+                    </td>
+                    <td class="py-4 text-center">
+                        <a href="#">{{ $post->user->name }}</a>
+                    </td>
+                    <td class="py-4">
+                        <div class="flex justify-between">
+                            <div>
+                                <a href="{{ route('admin.posts.edit', $post) }}" class="text-blue-400"><x-heroicon-o-pencil-alt class="w-5 inline-block" /> Edit</a>
+                            </div>
+                            <div class="flex">
+                                <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="flex">
+                                    @method('DELETE')
+                                    @csrf
 
-                                <input type="hidden" name="id" value="{{ $post }}">
-                                <button type="submit" class="text-red-500"><x-heroicon-o-trash class="w-5 inline-block" /> Delete</button>
-                            </form>
+                                    <input type="hidden" name="id" value="{{ $post }}">
+                                    <button type="submit" class="text-red-500"><x-heroicon-o-trash class="w-5 inline-block" /> Delete</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            @empty
-                <h1 class="text-xl text-gray-700 font-bold">Nenhum post cadastrado ainda.</h1>
-            @endforelse
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        @else
+            <h1 class="text-xl text-gray-700 font-bold">No posts found.</h1>
+        @endif
+
     </div>
 @endsection
