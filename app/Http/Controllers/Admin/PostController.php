@@ -124,7 +124,9 @@ class PostController extends Controller
         if (! isset($column)) {
             return $posts->sortByDesc('created_at');
         }
-        $order = \request()->get('order');
-        return $posts->sortBy([$column, $order]);
+        if (\request()->get('order') === 'desc') {
+            return $posts->sortByDesc($column);
+        }
+        return $posts->sortBy($column);
     }
 }

@@ -1,9 +1,7 @@
 @php
     $isActive = request()->get('orderby') === $column;
     $order = request()->get('order');
-    $query = request()->getQueryString();
-    $query = preg_replace('/&?orderby(.)*/', '', $query);
-    $params = explode('=', $query);
+    $params = request()->query->all();
 @endphp
 
 <th {{ $attributes->merge(['class']) }}>
