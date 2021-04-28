@@ -44,11 +44,6 @@ class Post extends Model
         $this->attributes['slug'] = $value;
     }
 
-    public function getPublishedAttribute($value)
-    {
-        return $value == true ? 'Published' : 'Draft';
-    }
-
     /**
      * Increment a number to the final of the slug until it is unique.
      *

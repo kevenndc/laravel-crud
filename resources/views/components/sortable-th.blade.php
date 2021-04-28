@@ -5,19 +5,20 @@
 @endphp
 
 <th {{ $attributes->merge(['class']) }}>
-    <a href="{{
-        $order === 'asc'
-            ? route($route, array_merge($params, ['orderby' => $column, 'order' => 'desc']))
-            : route($route, array_merge($params, ['orderby' => $column, 'order' => 'asc']))
-    }}">
-        {{ $slot }}
-
-        @if($isActive && $order === 'asc')
-            <x-heroicon-o-arrow-sm-up class="w-5" />
-        @elseif($isActive && $order === 'desc')
-            <x-heroicon-o-arrow-sm-down class="w-5" />
-        @else
-            <x-heroicon-o-switch-vertical class="w-5 text-gray-300" />
-        @endif
-    </a>
+    @if($isActive && $order === 'asc')
+        <a href="{{ route($route, array_merge($params, ['orderby' => $column, 'order' => 'desc'])) }}">
+            {{ $slot }}
+            <x-heroicon-o-arrow-sm-up class="inline-block w-5" />
+        </a>
+    @elseif($isActive && $order === 'desc')
+        <a href="{{ route($route, array_merge($params, ['orderby' => $column, 'order' => 'asc'])) }}">
+            {{ $slot }}
+            <x-heroicon-o-arrow-sm-down class="inline-block w-5" />
+        </a>
+    @else
+        <a href="{{ route($route, array_merge($params, ['orderby' => $column, 'order' => 'asc'])) }}">
+            {{ $slot }}
+            <x-heroicon-o-switch-vertical class="inline-block w-5 text-gray-300" />
+        </a>
+    @endif
 </th>

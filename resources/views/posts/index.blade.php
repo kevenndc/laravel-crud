@@ -25,18 +25,14 @@
         @if($posts->isNotEmpty())
         <table class="w-full">
             <thead>
-                <x-sortable-th
-                    route="admin.posts.index"
-                    column="id"
-                >
+                <x-sortable-th route="admin.posts.index" column="id" class="text-left">
                     ID
                 </x-sortable-th>
-                <x-sortable-th
-                    route="admin.posts.index"
-                    column="title"
-                    class="text-left"
-                >
+                <x-sortable-th route="admin.posts.index" column="title" class="text-left">
                     Title
+                </x-sortable-th>
+                <x-sortable-th route="admin.posts.index" column="title" class="text-left">
+                    Created at
                 </x-sortable-th>
                 <th>Author</th>
                 <th>Options</th>
