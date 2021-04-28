@@ -25,36 +25,40 @@
         @if($posts->isNotEmpty())
         <table class="w-full">
             <thead>
-                <x-sortable-th route="admin.posts.index" column="id" class="text-left">
+                <x-sortable-th route="admin.posts.index" column="id" class="px-3 text-left">
                     ID
                 </x-sortable-th>
-                <x-sortable-th route="admin.posts.index" column="title" class="text-left">
+                <x-sortable-th route="admin.posts.index" column="title" class="px-3 text-left w-5/12">
                     Title
                 </x-sortable-th>
-                <x-sortable-th route="admin.posts.index" column="title" class="text-left">
-                    Created at
+                <x-sortable-th route="admin.posts.index" column="created_at" class="px-3 text-left">
+                    Date
                 </x-sortable-th>
-                <th>Author</th>
-                <th>Options</th>
+                <th class="px-3">Author</th>
+                <th class="px-3">Options</th>
             </thead>
             <tbody>
             @foreach($posts as $post)
                 <tr class="w-full border-b border-gray-300 last:border-b-0">
-                    <td class="py-4">
+                    <td class="py-4 px-3">
                         <span>{{ $post->id }}</span>
                     </td>
-                    <td class="py-4">
-                        <a href="#">{{ Str::limit($post->title, 100, '...') }}</a>
+                    <td class="py-4 pl-3 pr-6">
+                        <a href="#">{{ $post->title }}</a>
                         @if(! $post->published)
-                            <span class="text-gray-400"> - draft</span>
+                            <span class="text-gray-400 whitespace-nowrap"> - draft</span>
                         @endif
                     </td>
-                    <td class="py-4 text-center">
+                    <td class="py-4">
+                        <span class="block text-gray-500 text-sm">{{ $post->published ? 'Published at' : 'Created at' }}</span>
+                        <span class="block text-gray-700 text-">{{ $post->published_at ?: $post->created_at }}</span>
+                    </td>
+                    <td class="py-4 px-3 text-center">
                         <a href="#">{{ $post->user->name }}</a>
                     </td>
-                    <td class="py-4">
+                    <td class="py-4 px-3 w-36">
                         <div class="flex justify-between">
-                            <div>
+                            <div class="text-center">
                                 <a href="{{ route('admin.posts.edit', $post) }}" class="text-blue-400"><x-heroicon-o-pencil-alt class="w-5 inline-block" /> Edit</a>
                             </div>
                             <div class="flex">
@@ -75,6 +79,6 @@
         @else
             <h1 class="text-xl text-gray-700 font-bold">No posts found.</h1>
         @endif
-
     </div>
+
 @endsection

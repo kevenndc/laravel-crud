@@ -19,11 +19,17 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $filter = $request->get('filter');
+        $column = $request->get('orderby') ?? 'created_at';
+        $order = $request->get('order') !== 'asc';
+
         if (empty($posts = $this->getFilteredPosts($filter))) {
-            $posts = Post::all();
+            $posts = Post::paginate(10);
         }
-        $posts = $this->getOrderedPosts($posts);
-        return view('posts.index', ['posts' => $posts, 'counts' => Post::getCounts()]);
+
+        return view('posts.index', [
+            'posts' => $posts->sortBy($column, SORT_REGULAR, $order),
+            'counts' => Post::getCounts()
+        ]);
     }
 
     /**
@@ -108,25 +114,13 @@ class PostController extends Controller
     {
         switch ($filter) {
             case 'trashed':
-                return Post::onlyTrashed()->get();
+                return Post::onlyTrashed()->paginate(10);
             case 'published':
-                return Post::where('published', true)->get();
+                return Post::where('published', true)->paginate(10);
             case 'drafts':
-                return Post::where('published', false)->get();
+                return Post::where('published', false)->paginate(10);
             default:
                 return [];
         }
-    }
-
-    private function getOrderedPosts(\Illuminate\Support\Collection $posts)
-    {
-        $column = \request()->get('orderby');
-        if (! isset($column)) {
-            return $posts->sortByDesc('created_at');
-        }
-        if (\request()->get('order') === 'desc') {
-            return $posts->sortByDesc($column);
-        }
-        return $posts->sortBy($column);
     }
 }
