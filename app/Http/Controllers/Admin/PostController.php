@@ -22,7 +22,7 @@ class PostController extends Controller
         $column = $request->get('orderby') ?? 'created_at';
         $order = $request->get('order') ?? 'asc';
 
-        $posts = $this->filteredPosts($filter)
+        $posts = $this->filterPosts($filter)
                     ->orderBy($column, $order)
                     ->paginate(10);
 
@@ -109,9 +109,9 @@ class PostController extends Controller
      * Return a list of posts filtered by a giver filter (switch key).
      *
      * @param array $query
-     * @return Post[]
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    private function filteredPosts($filter)
+    private function filterPosts($filter)
     {
         switch ($filter) {
             case 'trashed':
