@@ -20,14 +20,14 @@ class PostController extends Controller
     {
         $filter = $request->get('filter');
         $column = $request->get('orderby') ?? 'created_at';
-        $order = $request->get('order') !== 'asc';
+        $order = $request->get('order') ?? 'asc';
 
-        if (empty($posts = $this->getFilteredPosts($filter))) {
-            $posts = Post::paginate(10);
-        }
+        $posts = $this->filteredPosts($filter)
+                    ->orderBy($column, $order)
+                    ->paginate(10);
 
         return view('posts.index', [
-            'posts' => $posts->sortBy($column, SORT_REGULAR, $order),
+            'posts' => $posts->withQueryString(),
             'counts' => Post::getCounts()
         ]);
     }
@@ -106,21 +106,22 @@ class PostController extends Controller
     }
 
     /**
-     * Get posts with query strings.
+     * Return a list of posts filtered by a giver filter (switch key).
+     *
      * @param array $query
      * @return Post[]
      */
-    private function getFilteredPosts($filter)
+    private function filteredPosts($filter)
     {
         switch ($filter) {
             case 'trashed':
-                return Post::onlyTrashed()->paginate(10);
+                return Post::onlyTrashed();
             case 'published':
-                return Post::where('published', true)->paginate(10);
+                return Post::where('published', true);
             case 'drafts':
-                return Post::where('published', false)->paginate(10);
+                return Post::where('published', false);
             default:
-                return [];
+                return Post::withoutTrashed();
         }
     }
 }

@@ -25,7 +25,7 @@
         @if($posts->isNotEmpty())
         <table class="w-full">
             <thead>
-                <x-sortable-th route="admin.posts.index" column="id" class="px-3 text-left">
+                <x-sortable-th route="admin.posts.index" column="id" class="pl-3 text-left">
                     ID
                 </x-sortable-th>
                 <x-sortable-th route="admin.posts.index" column="title" class="px-3 text-left w-5/12">
@@ -40,21 +40,21 @@
             <tbody>
             @foreach($posts as $post)
                 <tr class="w-full border-b border-gray-300 last:border-b-0">
-                    <td class="py-4 px-3">
+                    <td class="py-4 pl-3">
                         <span>{{ $post->id }}</span>
                     </td>
-                    <td class="py-4 pl-3 pr-6">
+                    <td class="py-4 px-3">
                         <a href="#">{{ $post->title }}</a>
                         @if(! $post->published)
                             <span class="text-gray-400 whitespace-nowrap"> - draft</span>
                         @endif
                     </td>
-                    <td class="py-4">
+                    <td class="py-4 px-3">
                         <span class="block text-gray-500 text-sm">{{ $post->published ? 'Published at' : 'Created at' }}</span>
                         <span class="block text-gray-700 text-">{{ $post->published_at ?: $post->created_at }}</span>
                     </td>
                     <td class="py-4 px-3 text-center">
-                        <a href="#">{{ $post->user->name }}</a>
+                        <a href="#">{{ Str::words($post->user->name, 3, '') }}</a>
                     </td>
                     <td class="py-4 px-3 w-36">
                         <div class="flex justify-between">
@@ -76,6 +76,9 @@
             @endforeach
             </tbody>
         </table>
+        <div class="mt-5">
+            {{ $posts->links() }}
+        </div>
         @else
             <h1 class="text-xl text-gray-700 font-bold">No posts found.</h1>
         @endif
