@@ -45,6 +45,12 @@ class Post extends Model
 
     }
 
+    public function setFeaturedImageAttribute($value)
+    {
+        $path = $value->store('images', 'public');
+        $this->attributes['featured_image'] = $path;
+    }
+
     /**
      * Handles the insertion of the slug attribute.
      * @param string $value The slug of the post.

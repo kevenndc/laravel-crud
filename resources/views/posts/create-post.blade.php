@@ -12,14 +12,14 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('admin.posts.store') }}" method="POST" >
+    <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="flex">
             <!-- Post content -->
             <div class="w-full bg-white rounded-lg p-4 mr-6 shadow-md">
-                <input type="text" name="title" placeholder="Post title" class="block mb-4 w-full rounded-md" required autofocus>
-                <textarea name="content" placeholder="Post content" class="block mb-4 w-full h-96 resize-none rounded-md"></textarea>
-                <textarea name="excerpt" placeholder="Post excerpt" class="block w-full h-40 resize-none rounded-md"></textarea>
+                <input type="text" name="title" placeholder="Post title" class="block mb-4 w-full rounded-md" value="{{ old('title') }}" required autofocus>
+                <textarea name="content" placeholder="Post content" class="block mb-4 w-full h-96 resize-none rounded-md">{{ old('content') }}</textarea>
+                <textarea name="excerpt" placeholder="Post excerpt" class="block w-full h-40 resize-none rounded-md">{{ old('excerpt') }}</textarea>
             </div>
             <!-- Post options -->
             <div class="w-2/6 max-w-300 flex flex-col bg-white rounded-lg p-4 shadow-md">

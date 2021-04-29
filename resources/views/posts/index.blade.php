@@ -19,7 +19,6 @@
             </a>
         </div>
     </div>
-
     {{--  Post List  --}}
     <div class="bg-white rounded-lg p-4 shadow-md">
         @if($posts->isNotEmpty())

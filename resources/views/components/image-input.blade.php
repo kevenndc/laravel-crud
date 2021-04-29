@@ -6,7 +6,7 @@
         <x-heroicon-o-cloud-upload class="w-8 text-blue-500" id="label-icon" />
         <span id="img-label-text" class="block font-bold text-center">{{ $label }}</span>
     </div>
-    <input type="file" id="{{ $name }}" name="{{ $name }}" class="hidden" onchange="updateField(this)">
+    <input type="file" id="{{ $name }}" name="{{ $name }}" class="hidden" onchange="updateField(this)" value="{{ old($name) }}">
 </label>
 
 <script>

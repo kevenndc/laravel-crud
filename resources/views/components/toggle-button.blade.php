@@ -5,7 +5,7 @@
         </span>
         <div class="relative">
             <!-- input -->
-            <input type="checkbox" id="{{ $name }}" name="{{ $name }}" class="sr-only toggle-input">
+            <input type="checkbox" id="{{ $name }}" name="{{ $name }}" class="sr-only toggle-input" value="{{ old($name) }}">
             <!-- line -->
             <div class="block bg-gray-300 w-14 h-8 rounded-full"></div>
             <!-- dot -->
