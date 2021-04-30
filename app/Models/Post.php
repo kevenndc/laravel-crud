@@ -47,7 +47,8 @@ class Post extends Model
 
     public function setFeaturedImageAttribute($value)
     {
-        $path = $value->store('images', 'public');
+        dd($value);
+        //$path = $value->store('images', 'public');
         $this->attributes['featured_image'] = $path;
     }
 
