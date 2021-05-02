@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\LocalUploadStorageService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,21 +35,39 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Returns a formatted date for the published_at attribute.
+     *
+     * @param $value
+     * @return string
+     */
     public function getPublishedAtAttribute($value)
     {
         return Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
     }
 
+    /**
+     * Returns a formatted date for the created_at attribute.
+     *
+     * @param $value
+     * @return string
+     */
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
 
     }
 
+    /**
+     * Handles the storage of the post featured image.
+     *
+     * @param $value
+     */
     public function setFeaturedImageAttribute($value)
     {
-        dd($value);
-        //$path = $value->store('images', 'public');
+        $path = (new LocalUploadStorageService('images/posts'))
+                ->store($value)
+                ->save();
         $this->attributes['featured_image'] = $path;
     }
 

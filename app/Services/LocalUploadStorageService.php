@@ -1,9 +1,9 @@
 <?php
 namespace App\Services;
 
-use League\Flysystem\Util;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class LocalUploadStorageService
 {
@@ -11,56 +11,90 @@ class LocalUploadStorageService
     private $path;
     private $fileName;
     private $drive = 'local';
-    private $overwriteAllowed = false;
+    private $canOverwrite = false;
     private $file;
 
-    public function __construct(string $directory = 'public/storage')
+    /**
+     * LocalUploadStorageService constructor.
+     * @param string $directory The storage directory tha the file should be stored.
+     */
+    public function __construct(string $directory = 'images')
     {
         $this->directory = $directory;
+        dd($this->directory);
     }
 
+    /**
+     * Saves the file related date in the object instance.
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     * @return $this
+     */
     public function store(\Illuminate\Http\UploadedFile $file)
     {
-        $this->fileName = Str::slug($file->getFilename());
+        $this->fileName = $this->makeFileName($file->getClientOriginalName());
         $this->file = $file;
         $this->setPath($this->fileName);
         return $this;
     }
 
+    /**
+     * Stores the file and returns its relative path to the 'storage' directory.
+     *
+     * @return false|string
+     */
     public function save()
     {
-        if (! $this->overwriteAllowed) {
-            $this->findAvailabeName();
+        if (! $this->canOverwrite) {
+            $this->fileName = $this->getAvailableName($this->fileName);
         }
+        $this->path = Storage::putFileAs($this->directory, $this->file, $this->fileName);
         return $this->path;
     }
 
-    public function allowOvewrite()
+    /**
+     * Deletes any files with the same name in the storage directory.
+     *
+     * @return $this
+     */
+    public function withOverwrite()
     {
-        $this->overwriteAllowed = true;
+        $this->canOverwrite = true;
         if (Storage::exists($this->path)) {
             Storage::delete($this->path);
         }
-        //Storage::putFileAs($)
-        return true;
+        return $this;
     }
 
-    public function findAvailabeName(string $fileName)
+    /**
+     * Returns a available name for the file if one already exists in same storage directory.
+     *
+     * @param string $fileName
+     * @return string
+     */
+    public function getAvailableName(string $fileName)
     {
         $fileName = $fileName ?? $this->fileName;
-        $this->setPath($fileName);
-
         if (Storage::exists($this->path)) {
             $fileName = $this->suffixWithNumber($fileName);
+            $this->setPath($fileName);
         }
         return $fileName;
     }
 
+    /**
+     * Add a number at the end of the file name.
+     *
+     * @param string $fileName
+     * @return string
+     */
     private function suffixWithNumber(string $fileName)
     {
+        $name = pathinfo($fileName, PATHINFO_FILENAME);
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
         $i = 1;
         do {
-            $newName = $fileName . '-' . $i++;
+            $newName = $name . '-' . $i++ . '.' . $extension;
             $this->setPath($newName);
         } while (Storage::exists($this->path));
 
@@ -76,11 +110,22 @@ class LocalUploadStorageService
      */
     public function uniqueFor(Model $model, string $attribute)
     {
+        if ($currentValue = $model->getAttribute($attribute)) {
+            dd($currentValue);
+        }
         return true;
     }
 
     private function setPath(string $fileName)
     {
-        $this->path = $this->directory . $fileName;
+        $this->path = "{$this->directory}/{$fileName}";
+    }
+
+    private function makeFileName(string $fileName)
+    {
+        $name = pathinfo($fileName, PATHINFO_FILENAME);
+        $name = Str::slug($name);
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        return "{$name}.{$extension}";
     }
 }
