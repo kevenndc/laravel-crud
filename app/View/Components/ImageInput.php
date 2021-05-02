@@ -23,16 +23,24 @@ class ImageInput extends Component
     public $label;
 
     /**
+     * The current value of the input if exists.
+     *
+     * @var $value
+     */
+    public $value;
+
+    /**
      * Create a new component instance.
      *
      * @param string $name The name of the field.
      * @param string $label The label of the field.
      * @return void
      */
-    public function __construct(string $name, string $label)
+    public function __construct(string $name, string $label, $value = '')
     {
         $this->name = $name;
         $this->label = $label;
+        $this->value = $value;
     }
 
     /**

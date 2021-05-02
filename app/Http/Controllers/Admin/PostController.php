@@ -19,11 +19,11 @@ class PostController extends Controller
     {
         $filter = $request->get('filter');
         $column = $request->get('orderby') ?? 'created_at';
-        $order = $request->get('order') ?? 'asc';
+        $order = $request->get('order') ?? 'desc';
 
         $posts = $this->filterPosts($filter)
-                      ->orderBy($column, $order)
-                      ->paginate(10);
+                    ->orderBy($column, $order)
+                    ->paginate(10);
 
         return view('posts.index', [
             'posts' => $posts->withQueryString(),
@@ -73,7 +73,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit-post')->with($post);
+        return view('posts.edit-post')->with('post', $post);
     }
 
     /**

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'New post')
+@section('title', 'Edit post')
 
 @section('content')
     <h1 class="text-2xl text-gray-900 font-bold">Edit post</h1>
@@ -12,7 +12,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('admin.posts.store') }}" method="POST" >
+    <form action="{{ route('admin.posts.store') }}" method="POST">
         @csrf
         <div class="flex">
             <!-- Post content -->
@@ -32,7 +32,7 @@
                     </button>
                 </div>
                 <x-toggle-button name="is_featured" label="Is featured?" class="mb-7" />
-                <x-image-input name="featured_image" label="Select a featured image" class="block w-full" />
+                <x-image-input name="featured_image" label="Select a featured image" value="{{ url($post->featured_image) }}" class="block w-full" />
             </div>
         </div>
 </form>
