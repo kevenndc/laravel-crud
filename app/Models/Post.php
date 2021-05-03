@@ -23,7 +23,11 @@ class Post extends Model
         'featured_image',
         'published',
     ];
-    // the author of the post
+
+    protected $dates = [
+        'created_at',
+        'published_at',
+    ];
 
     /**
      * The post author.
@@ -43,7 +47,10 @@ class Post extends Model
      */
     public function getPublishedAtAttribute($value)
     {
-        return Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
+        if (isset($value)) {
+            $value = $value->format('d/m/Y \\a\\t H:i');
+        }
+        return $value;
     }
 
     /**
@@ -54,8 +61,10 @@ class Post extends Model
      */
     public function getCreatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
-
+        if (isset($value)) {
+            $value = $value->format('d/m/Y \\a\\t H:i');
+        }
+        return $value;
     }
 
     /**
@@ -65,6 +74,9 @@ class Post extends Model
      */
     public function setFeaturedImageAttribute($value)
     {
+        if (! isset($value)) {
+            return;
+        }
         $path = (new LocalUploadStorageService('images/posts'))
                 ->store($value)
                 ->save();

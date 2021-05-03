@@ -30,17 +30,26 @@ class ImageInput extends Component
     public $value;
 
     /**
+     * A string of classes for the image preview.
+     *
+     * @var $imageClasses
+     * @type string
+     */
+    public $imageClasses;
+
+    /**
      * Create a new component instance.
      *
      * @param string $name The name of the field.
      * @param string $label The label of the field.
      * @return void
      */
-    public function __construct(string $name, string $label, $value = '')
+    public function __construct(string $name, string $label, $value = '', $imageClasses = '')
     {
         $this->name = $name;
         $this->label = $label;
         $this->value = $value;
+        $this->imageClasses = $imageClasses;
     }
 
     /**

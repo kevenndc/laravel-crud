@@ -33,15 +33,18 @@
                 <tbody>
                 @foreach($posts as $post)
                     <tr class="w-full border-b border-gray-300 last:border-b-0">
+                        {{-- ID --}}
                         <td class="py-4 pl-3">
                             <span>{{ $post->id }}</span>
                         </td>
+                        {{-- Title --}}
                         <td class="py-4 px-3">
-                            <a href="#">{{ $post->title }}</a>
+                            <a href="{{ route('admin.posts.edit', $post) }}">{{ $post->title }}</a>
                             @if(! $post->published)
                                 <span class="text-gray-400 whitespace-nowrap"> - draft</span>
                             @endif
                         </td>
+                        {{-- Date --}}
                         <td class="py-4 px-3">
                             <span class="block text-gray-500 text-sm">{{ $post->published ? 'Published at' : 'Created at' }}</span>
                             <span class="block text-gray-700 text-">{{ $post->published_at ?: $post->created_at }}</span>
@@ -49,6 +52,7 @@
                         <td class="py-4 px-3 text-center">
                             <a href="#">{{ Str::words($post->user->name, 3, '') }}</a>
                         </td>
+                        {{-- Options --}}
                         <td class="py-4 px-3 w-36">
                             <div class="flex justify-between">
                                 <div class="text-center">

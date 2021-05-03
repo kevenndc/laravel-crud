@@ -10,7 +10,6 @@ class LocalUploadStorageService
     private $directory;
     private $path;
     private $fileName;
-    private $drive = 'local';
     private $canOverwrite = false;
     private $file;
 
@@ -21,7 +20,6 @@ class LocalUploadStorageService
     public function __construct(string $directory = 'images')
     {
         $this->directory = $directory;
-        dd($this->directory);
     }
 
     /**

@@ -1,12 +1,12 @@
-<div class="mb-3">
-    <img id="img-preview" src="{{ $value ?? '' }}">
+<div class="mb-3 {{ $imageClasses }}">
+    <img id="img-preview" src="{{ $value ?? '' }}" class="object-cover h-full mx-auto">
 </div>
 <label for="{{ $name }}" class="cursor-pointer text-gray-500 border-2 border-blue-500 rounded-md">
     <div class="btn-img-input {{ $value ? 'has-image' : '' }}" id="btn-img-input">
         <x-heroicon-o-cloud-upload class="w-8 text-blue-500" id="label-icon" />
-        <span id="img-label-text" class="block font-bold text-center">{{ $label }}</span>
+        <span id="img-label-text" class="block font-bold text-center">{{ $value ? 'Change image' : $label }}</span>
     </div>
-    <input type="file" id="{{ $name }}" name="{{ $name }}" class="hidden" onchange="updateField(this)" value="{{ old($value) }}">
+    <input type="file" id="{{ $name }}" name="{{ $name }}" class="hidden" onchange="updateField(this)" value="{{ $value }}">
 </label>
 
 <script>

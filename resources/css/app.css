@@ -22,5 +22,5 @@
     @apply ml-2;
 }
 .btn-img-input.has-image svg {
-    @apply text-white;
+    @apply text-white w-6;
 }

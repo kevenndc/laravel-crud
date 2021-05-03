@@ -32273,6 +32273,7 @@ select {
 .btn-img-input.has-image svg {
   --tw-text-opacity: 1;
   color: rgba(255, 255, 255, var(--tw-text-opacity));
+  width: 1.5rem;
 }
 
 @media (min-width: 640px) {
