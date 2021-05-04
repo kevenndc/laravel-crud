@@ -25,11 +25,10 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $filter = $request->get('filter');
         $column = $request->get('orderby') ?? 'created_at';
         $order = $request->get('order') ?? 'desc';
 
-        $posts = $this->filterPosts($filter)
+        $posts = $this->filterPosts($request->get('filter'))
                     ->orderBy($column, $order)
                     ->paginate(10);
 
