@@ -64,17 +64,6 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param Post $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        dd($post);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param int $id
@@ -138,10 +127,9 @@ class PostController extends Controller
 
     private function storeFeaturedImage(array &$validated)
     {
-        $featuredImage = $validated['featured_image'];
-        if (! isset($featuredImage)) {
+        if (! isset($validated['featured_image'])) {
             return;
         }
-        $validated['featured_image'] = $this->uploadStorage->store($featuredImage)->save();
+        $validated['featured_image'] = $this->uploadStorage->store($validated['featured_image'])->save();
     }
 }
