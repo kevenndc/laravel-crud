@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\{PostController, UserController};
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +25,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('posts')->group(function () {
         Route::resource('posts', PostController::class)->except('show');
+    });
+
+    Route::prefix('users')->group(function () {
+        Route::resource('users', UserController::class)->except('show');
     });
 });
 
