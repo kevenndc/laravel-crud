@@ -49,7 +49,7 @@ class Post extends Model
     public function getPublishedAtAttribute($value)
     {
         if (isset($value)) {
-            Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
+            $value = Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
         }
         return $value;
     }
@@ -63,28 +63,10 @@ class Post extends Model
     public function getCreatedAtAttribute($value)
     {
         if (isset($value)) {
-            Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
+            $value = Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
         }
         return $value;
     }
-
-//    /**
-//     * Handles the storage of the post featured image.
-//     *
-//     * @param $value
-//     */
-//    public function setFeaturedImageAttribute($value)
-//    {
-//        if (! isset($value)) {
-//            return;
-//        }
-//        $path = resolve(UploadStorageService::class)->store($value)->save();
-//
-////        $path = (new LocalUploadStorageService('images/posts'))
-////                ->store($value)
-////                ->save();
-//        $this->attributes['featured_image'] = $path;
-//    }
 
     /**
      * Handles the insertion of the slug attribute.
