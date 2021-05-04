@@ -5,22 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class LocalUploadStorageService
+class LocalUploadStorageService implements UploadStorageService
 {
-    private $directory;
+    private $file;
     private $path;
     private $fileName;
+    private $directory;
     private $canOverwrite = false;
-    private $file;
 
-    /**
-     * LocalUploadStorageService constructor.
-     * @param string $directory The storage directory tha the file should be stored.
-     */
-    public function __construct(string $directory = 'images')
-    {
-        $this->directory = $directory;
-    }
 
     /**
      * Saves the file related date in the object instance.
@@ -30,9 +22,20 @@ class LocalUploadStorageService
      */
     public function store(\Illuminate\Http\UploadedFile $file)
     {
-        $this->fileName = $this->makeFileName($file->getClientOriginalName());
         $this->file = $file;
-        $this->setPath($this->fileName);
+        $this->fileName = $this->makeFileName($file->getClientOriginalName());
+        return $this;
+    }
+
+    /**
+     * Saves the directory which the file should be saved.
+     *
+     * @param string $directory
+     * @return $this
+     */
+    public function inDirectory(string $directory)
+    {
+        $this->directory = $directory;
         return $this;
     }
 
@@ -43,6 +46,7 @@ class LocalUploadStorageService
      */
     public function save()
     {
+        $this->setPath($this->fileName);
         if (! $this->canOverwrite) {
             $this->fileName = $this->getAvailableName($this->fileName);
         }
@@ -64,13 +68,18 @@ class LocalUploadStorageService
         return $this;
     }
 
+    protected function setPath(string $fileName)
+    {
+        $this->path = "{$this->directory}/{$fileName}";
+    }
+
     /**
      * Returns a available name for the file if one already exists in same storage directory.
      *
      * @param string $fileName
      * @return string
      */
-    public function getAvailableName(string $fileName)
+    protected function getAvailableName(string $fileName)
     {
         $fileName = $fileName ?? $this->fileName;
         if (Storage::exists($this->path)) {
@@ -86,7 +95,7 @@ class LocalUploadStorageService
      * @param string $fileName
      * @return string
      */
-    private function suffixWithNumber(string $fileName)
+    protected function suffixWithNumber(string $fileName)
     {
         $name = pathinfo($fileName, PATHINFO_FILENAME);
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -99,27 +108,7 @@ class LocalUploadStorageService
         return $newName;
     }
 
-    /**
-     * Make sure that will only exist one file for a model attribute (table column)
-     * by deleting older records if they exist.
-     *
-     * @param Model $model
-     * @return bool
-     */
-    public function uniqueFor(Model $model, string $attribute)
-    {
-        if ($currentValue = $model->getAttribute($attribute)) {
-            dd($currentValue);
-        }
-        return true;
-    }
-
-    private function setPath(string $fileName)
-    {
-        $this->path = "{$this->directory}/{$fileName}";
-    }
-
-    private function makeFileName(string $fileName)
+    protected function makeFileName(string $fileName)
     {
         $name = pathinfo($fileName, PATHINFO_FILENAME);
         $name = Str::slug($name);

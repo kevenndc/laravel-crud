@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
+use App\Services\UploadStorageService;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,13 @@ use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
+    protected $uploadStorage;
+
+    public function __construct(UploadStorageService $uploadStorage)
+    {
+        $this->uploadStorage = $uploadStorage->inDirectory('images/posts');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -50,6 +58,7 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $validated = $request->validated();
+        $this->storeFeaturedImage($validated);
         $post = Auth::user()->posts()->create($validated);
         return redirect()->route('admin.posts.index');
     }
@@ -86,6 +95,7 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $validated = $request->validated();
+        $this->storeFeaturedImage($validated);
         $post->update($validated);
         return back();
     }
@@ -124,5 +134,14 @@ class PostController extends Controller
             default:
                 return Post::withoutTrashed();
         }
+    }
+
+    private function storeFeaturedImage(array &$validated)
+    {
+        $featuredImage = $validated['featured_image'];
+        if (! isset($featuredImage)) {
+            return;
+        }
+        $validated['featured_image'] = $this->uploadStorage->store($featuredImage)->save();
     }
 }

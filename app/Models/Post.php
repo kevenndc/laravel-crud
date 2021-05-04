@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\LocalUploadStorageService;
+use App\Services\UploadStorageService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -48,7 +49,7 @@ class Post extends Model
     public function getPublishedAtAttribute($value)
     {
         if (isset($value)) {
-            $value = $value->format('d/m/Y \\a\\t H:i');
+            Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
         }
         return $value;
     }
@@ -62,26 +63,28 @@ class Post extends Model
     public function getCreatedAtAttribute($value)
     {
         if (isset($value)) {
-            $value = $value->format('d/m/Y \\a\\t H:i');
+            Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
         }
         return $value;
     }
 
-    /**
-     * Handles the storage of the post featured image.
-     *
-     * @param $value
-     */
-    public function setFeaturedImageAttribute($value)
-    {
-        if (! isset($value)) {
-            return;
-        }
-        $path = (new LocalUploadStorageService('images/posts'))
-                ->store($value)
-                ->save();
-        $this->attributes['featured_image'] = $path;
-    }
+//    /**
+//     * Handles the storage of the post featured image.
+//     *
+//     * @param $value
+//     */
+//    public function setFeaturedImageAttribute($value)
+//    {
+//        if (! isset($value)) {
+//            return;
+//        }
+//        $path = resolve(UploadStorageService::class)->store($value)->save();
+//
+////        $path = (new LocalUploadStorageService('images/posts'))
+////                ->store($value)
+////                ->save();
+//        $this->attributes['featured_image'] = $path;
+//    }
 
     /**
      * Handles the insertion of the slug attribute.
