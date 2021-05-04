@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,28 +18,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/*Route::group([
-    'prefix' => 'admin',
-    'name' => 'admin.' ,
-    'middleware' => ['auth', 'verified']
-], function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('layouts.dashboard');
+    })->name('dashboard');
 
-});*/
+    Route::prefix('posts')->group(function () {
+        Route::resource('posts', PostController::class)->except('show');
+    });
+});
 
-Route::prefix('admin')
-    ->name('admin.')
-    ->middleware(['auth', 'verified'])
-    ->group(function () {
-        Route::get('/', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
-
-        Route::get('/posts', function () {
-            return true;
-        })->name('posts');
-    }
-);
-
+route::middleware(['guest'])->group(function () {
+    Route::get('blog/{post}', [PostController::class, 'show'])->name('posts.show');
+});
 
 
 require __DIR__.'/auth.php';

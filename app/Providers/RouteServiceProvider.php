@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+
+use App\Models\Post;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/admin';
+    public const HOME = '/dashboard';
 
     /**
      * The controller namespace for the application.
@@ -46,6 +48,12 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+
+            // binds post parameter to a Post id and returns a Post Model to the controller.
+            // this explicit binding is necessary for updating and deleting trashed posts.
+            Route::bind('post', function($id) {
+                return Post::withTrashed()->findOrFail($id);
+            });
         });
     }
 

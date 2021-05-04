@@ -13,12 +13,16 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
                 logo: ['Raleway'],
             },
+            maxWidth: {
+                '200': '200px',
+                '300': '300px',
+            },
         },
     },
-
     variants: {
         extend: {
             opacity: ['disabled'],
+            borderWidth: ['last'],
         },
     },
 
