@@ -17,11 +17,18 @@
         <div class="flex">
             <!-- Post content -->
             <div class="w-full bg-white rounded-lg p-4 mr-6 shadow-md">
-                <label for="title" class="text-xl text-gray-700">Title</label>
-                <input type="text" id="title" name="title" placeholder="Post title" class="block mb-4 w-full rounded-md" value="{{ old('title') }}" required autofocus>
+                <div class="grid grid-rows-2 grid-cols-3 gap-2">
+                    <div class="col-span-1 row-span-2">
+                        <x-image-input name="featured_image" label="Select a featured image" class="block w-full" imageClasses="max-h-48" />
+                    </div>
+                    <div class="col-span-2 row-span-2">
+                        <label for="title" class="text-xl text-gray-700">Name</label>
+                        <input type="text" id="title" name="title" placeholder="Post title" class="block mb-4 w-full rounded-md" value="{{ old('name') }}" required autofocus>
 
-                <label for="content" class="text-xl text-gray-700">Content</label>
-                <textarea id="content" name="content" placeholder="Post content" class="block mb-4 w-full h-96 resize-none rounded-md">{{ old('content') }}</textarea>
+                        <label for="content" class="text-xl text-gray-700">E-mail</label>
+                        <input type="text" id="title" name="title" placeholder="Post title" class="block mb-4 w-full rounded-md" value="{{ old('email') }}" required autofocus>
+                    </div>
+                </div>
 
                 <label for="excerpt" class="text-xl text-gray-700">Excerpt</label>
                 <textarea id="excerpt" name="excerpt" placeholder="Post excerpt" class="block w-full h-40 resize-none rounded-md">{{ old('excerpt') }}</textarea>
@@ -37,7 +44,7 @@
                     </button>
                 </div>
                 <x-toggle-button name="is_featured" label="Is featured?" class="mb-7" />
-                <x-image-input name="featured_image" label="Select a featured image" class="block w-full" imageClasses="max-h-48" />
+
             </div>
         </div>
     </form>
