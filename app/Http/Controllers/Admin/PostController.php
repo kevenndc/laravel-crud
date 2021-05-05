@@ -28,12 +28,17 @@ class PostController extends Controller
         $column = $request->get('orderby') ?? 'created_at';
         $order = $request->get('order') ?? 'desc';
 
-        $posts = $this->filterPosts($request->get('filter'))
-                    ->orderBy($column, $order)
-                    ->paginate(10);
+        try {
+            $posts = $this->filterPosts($request->get('filter'))
+                        ->orderBy($column, $order)
+                        ->paginate(10)
+                        ->withQueryString();
+        } catch (\Exception $exception) {
+            $posts = null;
+        }
 
         return view('posts.index', [
-            'posts' => $posts->withQueryString(),
+            'posts' => $posts,
             'counts' => Post::getCounts()
         ]);
     }
@@ -45,7 +50,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create-post');
+        return view('posts.create');
     }
 
     /**
@@ -59,7 +64,7 @@ class PostController extends Controller
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
         $post = Auth::user()->posts()->create($validated);
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -70,7 +75,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit-post')->with('post', $post);
+        return view('posts.edit')->with('post', $post);
     }
 
     /**

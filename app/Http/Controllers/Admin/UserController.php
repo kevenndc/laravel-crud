@@ -18,12 +18,17 @@ class UserController extends Controller
         $column = $request->get('orderby') ?? 'created_at';
         $order = $request->get('order') ?? 'desc';
 
-        $users = $this->filterUsers($request->get('filter'))
-                    ->orderBy($column, $order)
-                    ->paginate(10);
+        try {
+            $users = $this->filterUsers($request->get('filter'))
+                        ->orderBy($column, $order)
+                        ->paginate(10)
+                        ->withQueryString();
+        } catch (\Exception $exception) {
+            $users = null;
+        }
 
         return view('users.index', [
-            'users' => $users->withQueryString(),
+            'users' => $users
 //            'counts' => User::countRoles()
         ]);
     }
@@ -31,11 +36,11 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        return true;
+        return view('users.create');
     }
 
     /**

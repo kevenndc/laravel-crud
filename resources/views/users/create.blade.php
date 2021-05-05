@@ -1,8 +1,8 @@
 @extends('layouts.dashboard')
-@section('title', 'New post')
+@section('title', 'New user')
 
 @section('content')
-    <h1 class="text-2xl text-gray-900 font-bold">New Post</h1>
+    <h1 class="text-2xl text-gray-900 font-bold">New User</h1>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -12,7 +12,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="flex">
             <!-- Post content -->
@@ -42,4 +42,3 @@
         </div>
     </form>
 @endsection
-

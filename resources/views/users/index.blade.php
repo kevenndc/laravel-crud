@@ -10,7 +10,7 @@
             <a href="{{ route('users.index') }}" class="text-blue-400 text-sm mr-2">All ()</a>
             <a href="{{ route('users.index', ['filter' => 'published']) }}" class="text-blue-400 text-sm mr-2">Admins ()</a>
             <a href="{{ route('users.index', ['filter' => 'drafts']) }}" class="text-blue-400 text-sm mr-2">Editors ()</a>
-            <a href="{{ route('users.index', ['filter' => 'trashed']) }}" class="text-red-500 text-sm">Collaborator ()</a>
+            <a href="{{ route('users.index', ['filter' => 'trashed']) }}" class="text-blue-400 text-sm">Collaborator ()</a>
         </div>
         <div>
             <a href="{{ route('users.create') }}" class="py-2 px-4 font-bold flex items-center text-white bg-blue-500 rounded-lg shadow-md duration-200 hover:bg-blue-600">
@@ -21,7 +21,7 @@
     </div>
     {{--  Post List  --}}
     <div class="bg-white rounded-lg p-4 shadow-md">
-        @if($users->isNotEmpty())
+        @if(isset($users))
             <table class="w-full">
                 <thead>
                 <x-sortable-th route="users.index" column="id" class="pl-3 text-left">ID</x-sortable-th>

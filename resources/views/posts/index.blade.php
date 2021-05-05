@@ -21,7 +21,7 @@
     </div>
     {{--  Post List  --}}
     <div class="bg-white rounded-lg p-4 shadow-md">
-        @if($posts->isNotEmpty())
+        @if(isset($posts))
             <table class="w-full">
                 <thead>
                     <x-sortable-th route="posts.index" column="id" class="pl-3 text-left">ID</x-sortable-th>
