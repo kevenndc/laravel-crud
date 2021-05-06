@@ -23,11 +23,11 @@
                     </div>
                     <div class="w-full">
                         {{-- Name --}}
-                        <label for="title" class="text-xl text-gray-700">Name</label>
-                        <input type="text" id="title" name="title" placeholder="User name" class="block mb-4 w-full rounded-md" value="{{ old('name') }}" required autofocus>
+                        <label for="name" class="text-xl text-gray-700">Name</label>
+                        <input type="text" id="name" name="name" placeholder="User name" class="block mb-4 w-full rounded-md" value="{{ old('name') }}" required autofocus>
                         {{-- E-mail --}}
-                        <label for="content" class="text-xl text-gray-700">E-mail</label>
-                        <input type="text" id="title" name="title" placeholder="User e-mail" class="block mb-4 w-full rounded-md" value="{{ old('email') }}" required>
+                        <label for="email" class="text-xl text-gray-700">E-mail</label>
+                        <input type="text" id="email" name="email" placeholder="User e-mail" class="block mb-4 w-full rounded-md" value="{{ old('email') }}" required>
                         {{-- Password --}}
                         <label for="password-input" class="text-xl text-gray-700">Password</label>
                         <div class="flex items-center max-w-3xl">

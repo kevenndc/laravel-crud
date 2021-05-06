@@ -42,7 +42,7 @@ class PostRequest extends FormRequest
             'content' => 'string|nullable|required_unless:save,draft',
             'excerpt' => 'string|nullable',
             'is_featured' => 'boolean',
-            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp,bmp',
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp,bmp|max:4096',
             'published' => 'boolean',
         ];
     }
