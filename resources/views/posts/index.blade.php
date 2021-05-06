@@ -24,7 +24,6 @@
         @if(isset($posts))
             <table class="w-full">
                 <thead>
-                    <x-sortable-th route="posts.index" column="id" class="pl-3 text-left">ID</x-sortable-th>
                     <x-sortable-th route="posts.index" column="title" class="px-3 text-left w-5/12">Title</x-sortable-th>
                     <x-sortable-th route="posts.index" column="created_at" class="px-3 text-left">Date</x-sortable-th>
                     <th class="px-3">Author</th>
@@ -33,10 +32,6 @@
                 <tbody>
                 @foreach($posts as $post)
                     <tr class="w-full border-b border-gray-300 last:border-b-0">
-                        {{-- ID --}}
-                        <td class="py-4 pl-3">
-                            <span>{{ $post->id }}</span>
-                        </td>
                         {{-- Title --}}
                         <td class="py-4 px-3">
                             <a href="{{ route('posts.edit', $post) }}">{{ $post->title }}</a>
