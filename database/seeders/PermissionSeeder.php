@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PermissionSeeder extends Seeder
 {
@@ -13,6 +14,23 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('permissions')->insert([
+            ['name' => 'create-post'],
+            ['name' => 'update-post'],
+            ['name' => 'publish-post'],
+            ['name' => 'delete-post'],
+            ['name' => 'force-delete-post'],
+            ['name' => 'restore-post'],
+            ['name' => 'update-others-posts'],
+            ['name' => 'publish-others-posts'],
+            ['name' => 'delete-others-posts'],
+            ['name' => 'force-delete-others-posts'],
+            ['name' => 'restore-others-posts'],
+            ['name' => 'edit-user'],
+            ['name' => 'delete-user'],
+            ['name' => 'create-other-users'],
+            ['name' => 'edit-other-users'],
+            ['name' => 'delete-other-users'],
+        ]);
     }
 }
