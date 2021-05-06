@@ -36,7 +36,7 @@
                         Save as draft
                     </button>
                 </div>
-                <x-toggle-button name="is_featured" label="Is featured?" class="mb-7" />
+                <x-toggle-button name="is_featured" label="Is featured?" class="mb-7 text-gray-900 text-lg font-bold" />
                 <x-image-input name="featured_image" label="Select a featured image" class="block w-full" imageClasses="max-h-48" />
             </div>
         </div>
