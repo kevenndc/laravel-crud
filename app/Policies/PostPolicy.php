@@ -2,9 +2,12 @@
 
 namespace App\Policies;
 
+use App\Models\Permission;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 
 class PostPolicy
 {
@@ -17,11 +20,6 @@ class PostPolicy
      */
     public function __construct()
     {
-        //
-    }
 
-    public function update(User $user, Post $post)
-    {
-        return $user->id === $post->user_id;
     }
 }

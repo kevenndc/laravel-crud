@@ -29,6 +29,11 @@ class Role extends Model
         return $this->hasMany(User::class);
     }
 
+    public function hasPermissionTo(string $name)
+    {
+        return $this->permissions()->contains('name', $name);
+    }
+
     /**
      * Returns the role name.
      *
