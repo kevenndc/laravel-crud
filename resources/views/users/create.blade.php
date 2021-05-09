@@ -50,10 +50,11 @@
                 </div>
                 <div class="flex items-center">
                     <label class="text-md font-bold text-gray-900 mr-3 w-1/2" for="role">Role:</label>
-                    <select id="role" name="role" class="w-full">
-                        <option>Admin</option>
-                        <option>Editor</option>
-                        <option>Collaborator</option>
+                    <select id="role" name="role" class="w-full" >
+                        <option selected>...</option>
+                    @foreach($roles as $role)
+                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @endforeach
                     </select>
                 </div>
                 <x-toggle-button name="send-notification" label="Send email notification?" class="mt-8 text-gray-900 text-md font-bold" />

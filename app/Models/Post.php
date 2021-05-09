@@ -80,6 +80,11 @@ class Post extends Model
         $this->attributes['slug'] = $value;
     }
 
+    public function hasAttribute(string $attribute)
+    {
+        return array_key_exists($attribute, $this->attributes);
+    }
+
     /**
      * Handles the publishing of a post by also setting the published date.
      *
@@ -130,9 +135,9 @@ class Post extends Model
     public function getRelatedSlugs($slug)
     {
         return static::where('slug', 'LIKE', "{$slug}%")
-                        ->where('id', '<>', $this->id)
-                        ->pluck('slug')
-                        ->toArray();
+            ->where('id', '<>', $this->id)
+            ->pluck('slug')
+            ->toArray();
     }
 
     /**

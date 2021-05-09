@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -21,9 +24,9 @@ class UserController extends Controller
 
         try {
             $users = $this->filterUsers($request->get('filter'))
-                        ->orderBy($column, $order)
-                        ->paginate(10)
-                        ->withQueryString();
+                ->orderBy($column, $order)
+                ->paginate(10)
+                ->withQueryString();
         } catch (\Exception $exception) {
             $users = null;
         }
@@ -41,7 +44,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $roles = Role::select('id', 'name')->get();
+        return view('users.create')->with('roles', $roles);
     }
 
     /**
@@ -53,8 +57,8 @@ class UserController extends Controller
     public function store(AddUserRequest $request)
     {
         $validated = $request->validated();
-        dd($validated);
-        return true;
+        User::create($validated);
+        return redirect(route('users.index'));
     }
 
     /**
@@ -63,7 +67,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
         return true;
     }
@@ -97,9 +101,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        return true;
+        abort_if(Gate::denies('delete-other-users'), Response::HTTP_FORBIDDEN);
+        $user->delete();
+        return back();
     }
 
     /**

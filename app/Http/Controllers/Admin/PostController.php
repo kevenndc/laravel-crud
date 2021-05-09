@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 
 class PostController extends Controller
 {
@@ -139,7 +140,6 @@ class PostController extends Controller
         $filteredBuild = $this->buildFilteredPosts($request->get('filter'));
 
         if (Gate::denies('see-others-posts', Auth::user())) {
-            // fetch only the posts that the user created
             $filteredBuild = $filteredBuild->where('user_id', Auth::user()->id);
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class AddUserRequest extends FormRequest
 {
@@ -13,7 +14,14 @@ class AddUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Gate::allows('create-other-users');
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+           'role_id' => $this->role,
+        ]);
     }
 
     /**
@@ -28,6 +36,7 @@ class AddUserRequest extends FormRequest
             'email' => 'required|email|max:200',
             'password' => 'required|min:8|max:32',
             'profile_image' => 'nullable|image|file|mimes:jpg,jpeg,png,webp,bmp|max:4096',
+            'role_id' => 'numeric|min:1'
         ];
     }
 

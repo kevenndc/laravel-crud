@@ -30,6 +30,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'restore-others-posts'],
             ['name' => 'edit-user'],
             ['name' => 'delete-user'],
+            ['name' => 'see-other-users'],
             ['name' => 'create-other-users'],
             ['name' => 'edit-other-users'],
             ['name' => 'delete-other-users'],
