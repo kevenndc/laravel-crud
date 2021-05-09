@@ -23,13 +23,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('layouts.dashboard');
     })->name('dashboard');
 
-    Route::prefix('posts')->group(function () {
-        Route::resource('posts', PostController::class)->except('show');
-    });
-
-    Route::prefix('users')->group(function () {
-        Route::resource('users', UserController::class)->except('show');
-    });
+    Route::resource('posts', PostController::class)->except('show');
+    Route::resource('users', UserController::class)->except('show');
 });
 
 route::middleware(['guest'])->group(function () {
