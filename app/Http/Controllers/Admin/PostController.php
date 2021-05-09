@@ -6,8 +6,10 @@ use App\Models\Post;
 use App\Services\UploadStorageService;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -25,21 +27,13 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $column = $request->get('orderby') ?? 'created_at';
-        $order = $request->get('order') ?? 'desc';
+        abort_if(Gate::denies('see-post'), Response::HTTP_FORBIDDEN);
 
-        try {
-            $posts = $this->filterPosts($request->get('filter'))
-                        ->orderBy($column, $order)
-                        ->paginate(10)
-                        ->withQueryString();
-        } catch (\Exception $exception) {
-            $posts = null;
-        }
+        $posts = $this->fetchPosts($request);
 
         return view('posts.index', [
             'posts' => $posts,
-            'counts' => Post::getCounts()
+            'counts' => Post::countAllStates()
         ]);
     }
 
@@ -63,7 +57,7 @@ class PostController extends Controller
     {
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
-        $post = Auth::user()->posts()->create($validated);
+        Auth::user()->posts()->create($validated);
         return redirect()->route('posts.index');
     }
 
@@ -115,17 +109,17 @@ class PostController extends Controller
      * @param array $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    private function filterPosts($filter)
+    private function buildFilteredPosts($filter)
     {
         switch ($filter) {
             case 'trashed':
-                return Post::onlyTrashed();
+                return Post::with('user')->onlyTrashed();
             case 'published':
-                return Post::where('published', true);
+                return Post::with('user')->where('published', true);
             case 'drafts':
-                return Post::where('published', false);
+                return Post::with('user')->where('published', false);
             default:
-                return Post::withoutTrashed();
+                return Post::with('user')->withoutTrashed();
         }
     }
 
@@ -135,5 +129,28 @@ class PostController extends Controller
             return;
         }
         $validated['featured_image'] = $this->uploadStorage->store($validated['featured_image'])->save();
+    }
+
+    private function fetchPosts(Request $request)
+    {
+        $column = $request->get('orderby') ?? 'created_at';
+        $order = $request->get('order') ?? 'desc';
+
+        $filteredBuild = $this->buildFilteredPosts($request->get('filter'));
+
+        if (Gate::denies('see-others-posts', Auth::user())) {
+            // fetch only the posts that the user created
+            $filteredBuild = $filteredBuild->where('user_id', Auth::user()->id);
+        }
+
+        try {
+            $posts = $filteredBuild->orderBy($column, $order)
+                ->paginate(10)
+                ->withQueryString();
+        } catch (\Exception $exception) {
+            $posts = null;
+        }
+
+        return $posts;
     }
 }

@@ -12,11 +12,11 @@ class Role extends Model
     /**
      * Role permissions.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function permissions()
     {
-        return $this->hasMany(Permission::class);
+        return $this->belongsToMany(Permission::class);
     }
 
     /**
@@ -29,9 +29,13 @@ class Role extends Model
         return $this->hasMany(User::class);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function hasPermissionTo(string $name)
     {
-        return $this->permissions()->contains('name', $name);
+        return $this->permissions->contains('name', $name);
     }
 
     /**

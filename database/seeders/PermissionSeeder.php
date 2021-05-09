@@ -15,12 +15,14 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         DB::table('permissions')->insert([
+            ['name' => 'see-post'],
             ['name' => 'create-post'],
             ['name' => 'update-post'],
             ['name' => 'publish-post'],
             ['name' => 'delete-post'],
             ['name' => 'force-delete-post'],
             ['name' => 'restore-post'],
+            ['name' => 'see-others-posts'],
             ['name' => 'update-others-posts'],
             ['name' => 'publish-others-posts'],
             ['name' => 'delete-others-posts'],

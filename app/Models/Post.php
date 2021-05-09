@@ -140,7 +140,7 @@ class Post extends Model
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function getCounts() {
+    public static function countAllStates() {
         return collect([
             'posts' => static::all()->count(),
             'published' => static::where('published', 1)->count(),

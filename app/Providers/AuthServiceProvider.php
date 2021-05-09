@@ -38,7 +38,7 @@ class AuthServiceProvider extends ServiceProvider
 
         $permissions->map(function ($permission) {
             Gate::define($permission->name, function ($user) use ($permission) {
-                return $user->role()->hasPermissionTo($permission->name);
+                return $user->role->hasPermissionTo($permission->name);
             });
         });
     }
