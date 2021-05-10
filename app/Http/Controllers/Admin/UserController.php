@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -57,19 +58,9 @@ class UserController extends Controller
     public function store(AddUserRequest $request)
     {
         $validated = $request->validated();
-        User::create($validated);
+        $user = User::create($validated);
+        event(new Registered($user));
         return redirect(route('users.index'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        return true;
     }
 
     /**
