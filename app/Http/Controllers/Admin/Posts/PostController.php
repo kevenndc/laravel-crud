@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Posts;
 
 use App\Models\Post;
 use App\Services\UploadStorageService;
@@ -31,7 +31,7 @@ class PostController extends Controller
     {
         abort_if(Gate::denies('see-post'), Response::HTTP_FORBIDDEN);
 
-        $posts = $this->fetchPosts($request);
+        $posts = Post::with('user')->withoutTrashed()->paginate(10);
 
         return view('posts.index', [
             'posts' => $posts,
@@ -105,26 +105,6 @@ class PostController extends Controller
         return back();
     }
 
-    /**
-     * Return a list of posts filtered by a giver filter (switch key).
-     *
-     * @param array $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    private function buildFilteredPosts($filter)
-    {
-        switch ($filter) {
-            case 'trashed':
-                return Post::with('user')->onlyTrashed();
-            case 'published':
-                return Post::with('user')->where('published', true);
-            case 'drafts':
-                return Post::with('user')->where('published', false);
-            default:
-                return Post::with('user')->withoutTrashed();
-        }
-    }
-
     private function storeFeaturedImage(array &$validated)
     {
         if (! isset($validated['featured_image'])) {
@@ -132,26 +112,26 @@ class PostController extends Controller
         }
         $validated['featured_image'] = $this->uploadStorage->store($validated['featured_image'])->save();
     }
-
-    private function fetchPosts(Request $request)
-    {
-        $column = $request->get('orderby') ?? 'created_at';
-        $order = $request->get('order') ?? 'desc';
-
-        $filteredBuild = $this->buildFilteredPosts($request->get('filter'));
-
-        if (Gate::denies('see-others-posts', Auth::user())) {
-            $filteredBuild = $filteredBuild->where('user_id', Auth::user()->id);
-        }
-
-        try {
-            $posts = $filteredBuild->orderBy($column, $order)
-                ->paginate(10)
-                ->withQueryString();
-        } catch (\Exception $exception) {
-            $posts = null;
-        }
-
-        return $posts;
-    }
+//
+//    private function fetchPosts(Request $request)
+//    {
+//        $column = $request->get('orderby') ?? 'created_at';
+//        $order = $request->get('order') ?? 'desc';
+//
+//        $filteredBuild = $this->buildFilteredPosts($request->get('filter'));
+//
+//        if (Gate::denies('see-others-posts', Auth::user())) {
+//            $filteredBuild = $filteredBuild->where('user_id', Auth::user()->id);
+//        }
+//
+//        try {
+//            $posts = $filteredBuild->orderBy($column, $order)
+//                ->paginate(10)
+//                ->withQueryString();
+//        } catch (\Exception $exception) {
+//            $posts = null;
+//        }
+//
+//        return $posts;
+//    }
 }
