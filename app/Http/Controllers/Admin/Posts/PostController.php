@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Posts;
 
+use App\Http\Traits\PostIndexSortableColumns;
 use App\Models\Post;
 use App\Services\UploadStorageService;
 use Illuminate\Http\Request;
@@ -10,11 +11,12 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Database\Eloquent\Collection;
 
 
 class PostController extends Controller
 {
+    use PostIndexSortableColumns;
+
     protected $uploadStorage;
 
     public function __construct(UploadStorageService $uploadStorage)
@@ -31,12 +33,10 @@ class PostController extends Controller
     {
         abort_if(Gate::denies('see-post'), Response::HTTP_FORBIDDEN);
 
-        $posts = Post::with('user')->withoutTrashed()->paginate(10);
+        $builder = Post::with('user')->withoutTrashed();
+        $posts = $this->fetchPosts($builder);
 
-        return view('posts.index', [
-            'posts' => $posts,
-            'counts' => Post::countAllStates()
-        ]);
+        return view('posts.index', ['posts' => $posts, 'counts' => Post::countAllStates()]);
     }
 
     /**
@@ -99,9 +99,9 @@ class PostController extends Controller
     {
         if ($post->trashed()) {
             $post->forceDelete();
-        } else {
-            $post->delete();
+            return back();
         }
+        $post->delete();
         return back();
     }
 
@@ -112,26 +112,4 @@ class PostController extends Controller
         }
         $validated['featured_image'] = $this->uploadStorage->store($validated['featured_image'])->save();
     }
-//
-//    private function fetchPosts(Request $request)
-//    {
-//        $column = $request->get('orderby') ?? 'created_at';
-//        $order = $request->get('order') ?? 'desc';
-//
-//        $filteredBuild = $this->buildFilteredPosts($request->get('filter'));
-//
-//        if (Gate::denies('see-others-posts', Auth::user())) {
-//            $filteredBuild = $filteredBuild->where('user_id', Auth::user()->id);
-//        }
-//
-//        try {
-//            $posts = $filteredBuild->orderBy($column, $order)
-//                ->paginate(10)
-//                ->withQueryString();
-//        } catch (\Exception $exception) {
-//            $posts = null;
-//        }
-//
-//        return $posts;
-//    }
 }

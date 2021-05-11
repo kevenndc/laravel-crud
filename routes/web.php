@@ -29,9 +29,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('posts', PostController::class)->except('show');
-    Route::get('/posts/published', [PublishedPostController::class, 'index'])->name('posts.published.index');
-    Route::get('/posts/drafts', [DraftPostController::class, 'index'])->name('posts.drafts.index');
-    Route::get('/posts/trash', [PostTrashController::class, 'index'])->name('posts.trash.index');
+    Route::middleware('can:see-post')->prefix('/posts')->name('posts.')->group(function () {
+        Route::get('published', [PublishedPostController::class, 'index'])->name('published.index');
+        Route::get('drafts', [DraftPostController::class, 'index'])->name('drafts.index');
+        Route::get('trash', [PostTrashController::class, 'index'])->name('trash.index');
+    });
+
+
+
     Route::resource('users', UserController::class)->except('show');
 });
 

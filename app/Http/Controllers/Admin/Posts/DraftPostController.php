@@ -3,25 +3,17 @@
 namespace App\Http\Controllers\Admin\Posts;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\PostIndexSortableColumns;
 use App\Models\Post;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class DraftPostController extends Controller
 {
+    use PostIndexSortableColumns;
+
     public function index()
     {
-        abort_if(Gate::denies('see-post'), Response::HTTP_FORBIDDEN);
-
-        $posts = Post::with('user')->where('published', 0);
-
-        if (Gate::denies('see-others-posts')) {
-            $posts = $posts->where('user_id', Auth::user()->id);
-        }
-
-        $posts = $posts->paginate(10);
+        $builder = Post::with('user')->where('published', false);
+        $posts = $this->fetchPosts($builder);
 
         return view('posts.index', ['posts' => $posts, 'counts' => Post::countAllStates()]);
     }
