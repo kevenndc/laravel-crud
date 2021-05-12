@@ -90,10 +90,12 @@ class Post extends Model
      *
      * @param bool $value
      */
-    public function setPublishedAttribute(bool $value)
+    public function setStatusAttribute($value)
     {
-        $this->attributes['published'] = $value;
-        $this->setPublishedAtAttribute($value);
+        if ($value === 'published') {
+            $this->setPublishedAtAttribute($value);
+        }
+        $this->attributes['status'] = $value;
     }
 
     /**
@@ -106,6 +108,12 @@ class Post extends Model
         if ($value && !isset($this->published_at)) {
             $this->attributes['published_at'] = now();
         }
+    }
+
+    public function setDeletedAtAttribute($value)
+    {
+        $this->setStatusAttribute('trashed');
+        $this->attributes['deleted_at'] = $value;
     }
 
     /**

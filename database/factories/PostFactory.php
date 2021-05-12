@@ -29,6 +29,7 @@ class PostFactory extends Factory
             'published' => $this->faker->boolean(),
             'is_featured' => $this->faker->boolean(),
             'featured_image' => $this->faker->imageUrl(768, 768,'Post Featured Image', true),
+            //'status' =>
         ];
     }
 }

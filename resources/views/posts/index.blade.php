@@ -6,12 +6,7 @@
     {{--  Menu  --}}
     <div class="flex justify-between items-center mb-3">
         {{-- Filters --}}
-        <div>
-            <a href="{{ route('posts.index') }}" class="text-blue-400 text-sm mr-2">All ({{ $counts['posts'] }})</a>
-            <a href="{{ route('posts.published.index') }}" class="text-blue-400 text-sm mr-2">Published ({{ $counts['published'] }})</a>
-            <a href="{{ route('posts.drafts.index') }}" class="text-blue-400 text-sm mr-2">Drafts ({{ $counts['drafts'] }})</a>
-            <a href="{{ route('posts.trash.index') }}" class="text-red-500 text-sm">Trash ({{ $counts['trashed'] }})</a>
-        </div>
+        <x-post-counts />
         <div>
             <a href="{{ route('posts.create') }}" class="py-2 px-4 font-bold flex items-center text-white bg-blue-500 rounded-lg shadow-md duration-200 hover:bg-blue-600">
                 <x-heroicon-o-plus-circle class="w-5 mr-1" />
