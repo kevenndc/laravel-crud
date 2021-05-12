@@ -26,10 +26,9 @@ class PostFactory extends Factory
             'slug' => $this->faker->slug(),
             'content' => $this->faker->paragraphs(6, true),
             'excerpt' => $this->faker->paragraph(),
-            'published' => $this->faker->boolean(),
             'is_featured' => $this->faker->boolean(),
             'featured_image' => $this->faker->imageUrl(768, 768,'Post Featured Image', true),
-            //'status' =>
+            'status' => $this->faker->randomElement(['published', 'draft', 'trashed']),
         ];
     }
 }

@@ -30,14 +30,14 @@
                         {{-- Title --}}
                         <td class="py-4 px-3">
                             <a href="{{ route('posts.edit', $post) }}">{{ $post->title }}</a>
-                            @if(! $post->published)
+                            @if(! $post->status === 'draft')
                                 <span class="text-gray-400 whitespace-nowrap"> - draft</span>
                             @endif
                         </td>
                         {{-- Date --}}
                         <td class="py-4 px-3">
-                            <span class="block text-gray-500 text-sm">{{ $post->published ? 'Published at' : 'Created at' }}</span>
-                            <span class="block text-gray-700 text-">{{ $post->published_at ?: $post->created_at }}</span>
+                            <span class="block text-gray-500 text-sm">{{ $post->status }}</span>
+                            <span class="block text-gray-700 text-">{{ $post->status === 'published' ? $post->published_at : $post->created_at }}</span>
                         </td>
                         <td class="py-4 px-3 text-center">
                             <a href="#">{{ Str::words($post->user->name, 3, '') }}</a>

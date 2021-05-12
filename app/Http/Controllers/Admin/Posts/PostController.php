@@ -36,7 +36,7 @@ class PostController extends Controller
         $builder = Post::with('user')->withoutTrashed();
         $posts = $this->fetchPosts($builder);
 
-        return view('posts.index', ['posts' => $posts, 'counts' => Post::countAllStates()]);
+        return view('posts.index', ['posts' => $posts]);
     }
 
     /**

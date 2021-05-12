@@ -22,7 +22,7 @@ class Post extends Model
         'excerpt',
         'is_featured',
         'featured_image',
-        'published',
+        'status',
     ];
 
     protected $dates = [
@@ -146,19 +146,5 @@ class Post extends Model
             ->where('id', '<>', $this->id)
             ->pluck('slug')
             ->toArray();
-    }
-
-    /**
-     * Get the total number of posts and the number of posts for each status (published, draft, trashed).
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public static function countAllStates() {
-        return collect([
-            'posts' => static::all()->count(),
-            'published' => static::where('published', 1)->count(),
-            'drafts' => static::where('published', 0)->count(),
-            'trashed' => static::onlyTrashed()->count(),
-        ]);
     }
 }

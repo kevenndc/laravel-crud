@@ -35,19 +35,13 @@ class ViewServiceProvider extends ServiceProvider
                 $builder->where('user_id', Auth::user()->id);
             }
 
-            $counts = $builder->select([
-                DB::raw('id'),
-                DB::raw('COUNT(*) as `all`'),
-                DB::raw('SUM(CASE WHEN published = 1 THEN 1 ELSE 0 END) AS `published`'),
-                DB::raw('SUM(CASE WHEN published = 0 THEN 1 ELSE 0 END) AS `drafts`'),
-                DB::raw("SUM(CASE WHEN deleted_at IS NOT NULL OR deleted_at <> '' THEN 1 ELSE 0 END) AS `trashed`"),
-            ])
-            ->groupBy('id')
-            ->get();
+            $counts = $builder->select('status', DB::raw('count(*) as total'))
+                ->groupBy('status')
+                ->get()
+                ->pluck('total', 'status');
 
-            dd($counts);
+            $counts = $counts->merge(['all' => $counts->sum()])->toArray();
 
-            $counts = Post::countAllStates();
             $view->with('counts', $counts);
         });
     }
