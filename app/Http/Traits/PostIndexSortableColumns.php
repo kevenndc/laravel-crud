@@ -28,12 +28,8 @@ trait PostIndexSortableColumns
     }
 
     private function fetchParams() {
-        $column = in_array(request()->get('orderby'), $this->columns)
-            ? request()->get('orderby')
-            : 'created_at';
-        $order = in_array(request()->get('order'), ['asc', 'desc'])
-            ? request()->get('order')
-            : 'asc';
+        $column = $this->columns[request()->get('orderby')] ?? 'created_at';
+        $order = ['asc', 'desc'][request()->get('order')] ?? 'asc';
 
         return compact(['column', 'order']);
     }

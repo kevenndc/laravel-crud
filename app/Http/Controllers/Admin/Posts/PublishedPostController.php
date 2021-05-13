@@ -12,9 +12,9 @@ class PublishedPostController extends Controller
 
     public function index()
     {
-        $builder = Post::with('user')->where('published', true);
+        $builder = Post::with('user')->where('status', 'published');
         $posts = $this->fetchPosts($builder);
 
-        return view('posts.index', ['posts' => $posts, 'counts' => Post::countAllStates()]);
+        return view('posts.index')->with('posts', $posts);
     }
 }

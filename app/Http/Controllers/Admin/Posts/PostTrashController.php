@@ -15,6 +15,6 @@ class PostTrashController extends Controller
         $posts = Post::with('user')->onlyTrashed();
         $posts = $this->fetchPosts($posts);
 
-        return view('posts.index', ['posts' => $posts, 'counts' => Post::countAllStates()]);
+        return view('posts.index')->with('posts', $posts);
     }
 }

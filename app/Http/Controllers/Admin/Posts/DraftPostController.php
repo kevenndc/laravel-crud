@@ -12,9 +12,9 @@ class DraftPostController extends Controller
 
     public function index()
     {
-        $builder = Post::with('user')->where('published', false);
+        $builder = Post::with('user')->where('status', 'draft');
         $posts = $this->fetchPosts($builder);
 
-        return view('posts.index', ['posts' => $posts, 'counts' => Post::countAllStates()]);
+        return view('posts.index')->with('posts', $posts);
     }
 }

@@ -7,10 +7,8 @@ use App\Models\Post;
 use App\Services\UploadStorageService;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
 
 
 class PostController extends Controller
@@ -31,12 +29,10 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        abort_if(Gate::denies('see-post'), Response::HTTP_FORBIDDEN);
-
         $builder = Post::with('user')->withoutTrashed();
         $posts = $this->fetchPosts($builder);
 
-        return view('posts.index', ['posts' => $posts]);
+        return view('posts.index')->with('posts', $posts);
     }
 
     /**

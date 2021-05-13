@@ -24,7 +24,7 @@ class PostRequest extends FormRequest
         $slug = $this->slug ?? $this->title;
         $this->merge([
             'slug' => Str::slug($slug),
-            'published' => $this->save === 'publish',
+            'status' => $this->save,
             'is_featured' => $this->has('is_featured'),
         ]);
     }
@@ -43,7 +43,7 @@ class PostRequest extends FormRequest
             'excerpt' => 'string|nullable',
             'is_featured' => 'boolean',
             'featured_image' => 'nullable|image|mimes:jpg,jpeg,png,webp,bmp|max:4096',
-            'published' => 'boolean',
+            'status' => 'in:published,draft',
         ];
     }
 
