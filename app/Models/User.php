@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -42,6 +43,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'posts_count'
+    ];
+
     /**
      * The user role.
      *
@@ -62,6 +67,30 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class);
     }
 
+    /**
+     * Return the number of posts created by the user.
+     *
+     * @return int
+     */
+    public function getPostsCountAttribute()
+    {
+        return $this->posts()->count();
+    }
+
+    /**
+     * Returns a formatted date for the created_at attribute.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        if (isset($value)) {
+            $value = Carbon::parse($value)->format('d/m/Y \\a\\t H:i');
+        }
+        return $value;
+    }
+
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);
@@ -69,7 +98,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function setRoleAttribute($role)
     {
-        dd($role);
         $this->attributes['role_id'] = $role;
     }
 }

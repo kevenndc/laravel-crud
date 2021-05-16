@@ -36,7 +36,7 @@
                         </td>
                         {{-- Date --}}
                         <td class="py-4 px-3">
-                            <span class="block text-gray-500 text-sm">{{ $post->status === 'published' ? $post->status : 'created_at' }}</span>
+                            <span class="block text-gray-500 text-sm">{{ $post->status === 'published at' ? $post->status : 'created at' }}</span>
                             <span class="block text-gray-700 text-">{{ $post->status === 'published' ? $post->published_at : $post->created_at }}</span>
                         </td>
                         <td class="py-4 px-3 text-center">

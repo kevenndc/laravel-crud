@@ -19,10 +19,11 @@
         @if(isset($users))
             <table class="w-full">
                 <thead>
-                <x-sortable-th route="users.index" column="title" class="px-3 text-left">Name</x-sortable-th>
+                <x-sortable-th route="users.index" column="name" class="px-3 text-left">Name</x-sortable-th>
                 <th class="px-3">E-mail</th>
-                <x-sortable-th route="users.index" column="created_at" class="px-3 text-left text-center">Nº of Posts</x-sortable-th>
+                <x-sortable-th route="users.index" column="posts_count" class="px-3 text-left text-center">Nº of Posts</x-sortable-th>
                 <th class="px-3">Role</th>
+                <x-sortable-th route="users.index" column="created_at" class="px-3 text-left text-center">Date</x-sortable-th>
                 <th class="px-3">Actions</th>
                 </thead>
                 <tbody>
@@ -38,11 +39,16 @@
                         </td>
                         {{-- Nº of posts --}}
                         <td class="py-4 px-3 text-center">
-                            <a href="#">{{ $user->posts->count() }}</a>
+                            <a href="#">{{ $user->posts_count }}</a>
                         </td>
                         {{-- Role --}}
                         <td class="py-4 px-3 text-center">
                             <a href="#">{{ $user->role ?? 'Placeholder' }}</a>
+                        </td>
+                        {{-- Date --}}
+                        <td class="py-4 px-3">
+                            <span class="block text-gray-500 text-sm">created at</span>
+                            <span class="block text-gray-700 text-">{{ $user->created_at }}</span>
                         </td>
                         {{-- Options --}}
                         <td class="py-4 px-3 w-36">

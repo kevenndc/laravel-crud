@@ -1,8 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\Posts\{
+use App\Http\Controllers\Dashboard\Users\{
+    UserController,
+    AdminUserController,
+    EditorUserController,
+    AuthorUserController
+};
+use App\Http\Controllers\Dashboard\Posts\{
     PostController,
     PublishedPostController,
     DraftPostController,
@@ -35,9 +40,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('trash', [PostTrashController::class, 'index'])->name('trash.index');
     });
 
-
-
     Route::resource('users', UserController::class)->except('show');
+    Route::middleware('can:see-other-users')->prefix('/users')->name('users.')->group(function () {
+        Route::get('admins', [AdminUserController::class, 'index'])->name('admins.index');
+        Route::get('editors', [EditorUserController::class, 'index'])->name('editors.index');
+        Route::get('authors', [AuthorUserController::class, 'index'])->name('authors.index');
+    });
 });
 
 route::middleware(['guest'])->group(function () {

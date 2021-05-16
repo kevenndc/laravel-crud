@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Posts;
+namespace App\Http\Controllers\Dashboard\Posts;
 
 use App\Http\Traits\PostIndexSortableColumns;
 use App\Models\Post;

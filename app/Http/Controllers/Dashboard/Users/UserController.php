@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserRequest;
+use App\Http\Traits\UserIndexSortableColumns;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
+    use UserIndexSortableColumns;
+
     /**
      * Display a listing of the resource.
      *
@@ -20,22 +23,10 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $column = $request->get('orderby') ?? 'created_at';
-        $order = $request->get('order') ?? 'desc';
+        $builder = User::with('role');
+        $users = $this->fetchUsers($builder);
 
-        try {
-            $users = $this->filterUsers($request->get('filter'))
-                ->orderBy($column, $order)
-                ->paginate(10)
-                ->withQueryString();
-        } catch (\Exception $exception) {
-            $users = null;
-        }
-
-        return view('users.index', [
-            'users' => $users
-//            'counts' => User::countRoles()
-        ]);
+        return view('users.index')->with('users', $users);
     }
 
     /**
@@ -97,25 +88,5 @@ class UserController extends Controller
         abort_if(Gate::denies('delete-other-users'), Response::HTTP_FORBIDDEN);
         $user->delete();
         return back();
-    }
-
-    /**
-     * Return a list of posts filtered by a giver filter (switch key).
-     *
-     * @param array $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    private function filterUsers($filter)
-    {
-        switch ($filter) {
-            case 'admins':
-                return User::onlyTrashed();
-            case 'editors':
-                return User::where('published', true);
-            case 'collaborators':
-                return User::where('published', false);
-            default:
-                return User::query();
-        }
     }
 }
