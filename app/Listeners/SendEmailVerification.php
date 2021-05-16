@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Handlers;
+namespace App\Listeners;
 
 use App\Jobs\SendEmailNotification;
 use Illuminate\Auth\Events\Registered;
