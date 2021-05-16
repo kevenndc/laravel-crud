@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\View\Composers\PostCountComposer;
+use App\View\Composers\{PostCountComposer, UserCountComposer};
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,5 +26,6 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('components.post-counts', PostCountComposer::class);
+        View::composer('components.user-counts', UserCountComposer::class);
     }
 }

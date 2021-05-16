@@ -6,12 +6,7 @@
     {{--  Menu  --}}
     <div class="flex justify-between items-center mb-3">
         {{-- Filters --}}
-        <div>
-            <a href="{{ route('users.index') }}" class="text-blue-400 text-sm mr-2">All ()</a>
-            <a href="{{ route('users.index') }}" class="text-blue-400 text-sm mr-2">Admins ()</a>
-            <a href="{{ route('users.index') }}" class="text-blue-400 text-sm mr-2">Editors ()</a>
-            <a href="{{ route('users.index') }}" class="text-blue-400 text-sm">Collaborator ()</a>
-        </div>
+       <x-user-counts />
         <div>
             <a href="{{ route('users.create') }}" class="py-2 px-4 font-bold flex items-center text-white bg-blue-500 rounded-lg shadow-md duration-200 hover:bg-blue-600">
                 <x-heroicon-o-user-add class="w-5 mr-1" />
