@@ -43,7 +43,7 @@
                         </td>
                         {{-- Role --}}
                         <td class="py-4 px-3 text-center">
-                            <a href="#">{{ $user->role ?? 'Placeholder' }}</a>
+                            <a href="#">{{ $user->role->name ?? 'Placeholder' }}</a>
                         </td>
                         {{-- Date --}}
                         <td class="py-4 px-3">

@@ -37,14 +37,4 @@ class Role extends Model
     {
         return $this->permissions->contains('name', $name);
     }
-
-    /**
-     * Returns the role name.
-     *
-     * @return mixed|string
-     */
-    public function __toString()
-    {
-        return $this->name;
-    }
 }

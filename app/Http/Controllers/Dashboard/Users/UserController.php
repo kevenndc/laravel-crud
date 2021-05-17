@@ -57,12 +57,12 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  User  $user
+     * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        return true;
+        return view('users.edit')->with(compact('user'));
     }
 
     /**
