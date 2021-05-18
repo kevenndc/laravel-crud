@@ -21,22 +21,22 @@ class PasswordInput extends Component
     public $id;
 
     /**
-     * The input field value.
+     * Controls if the input is enabled.
      *
-     * @var $value
+     * @var $locked
      */
-    public $value;
-
+    public $locked;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $name, string $id, ?string $value = null)
+    public function __construct(string $name, string $id, ?string $value = null, string $locked = null)
     {
         $this->name = $name;
         $this->id = $id;
         $this->value = $value;
+        $this->locked = $locked;
     }
 
     /**
