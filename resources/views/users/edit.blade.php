@@ -32,13 +32,8 @@
                         {{-- Password --}}
                         <label for="password-input" class="text-xl text-gray-700">Password</label>
 
-                        <div class="flex items-center max-w-3xl">
-                            <div class="w-2/3">
-                                <x-password-input name="password" id="password-input" locked="true" />
-                            </div>
-                            <div class="w-1/3 ml-2">
-                                <button type="button" class="p-1 text-sm text-indigo-600" onclick="generatePassword()">Generate password</button>
-                            </div>
+                        <div class="flex items-center">
+                                <x-password-input name="password" id="password-input" locked="true" generator="true" />
                         </div>
                     </div>
                 </div>
@@ -57,10 +52,4 @@
             </div>
         </div>
     </form>
-    <script>
-        const generatePassword = () => {
-            const input = document.getElementById('password-input');
-            input.value = Math.random().toString(36).slice(2);
-        }
-    </script>
 @endsection

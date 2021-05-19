@@ -31,12 +31,19 @@ class PasswordInput extends Component
      *
      * @return void
      */
-    public function __construct(string $name, string $id, ?string $value = null, string $locked = null)
+
+    /**
+     * Controls the password generator.
+     *
+     * @var $generator
+     */
+    public $generator;
+    public function __construct(string $name, string $id, bool $locked = false, bool $generator = false)
     {
         $this->name = $name;
         $this->id = $id;
-        $this->value = $value;
         $this->locked = $locked;
+        $this->generator = $generator;
     }
 
     /**
