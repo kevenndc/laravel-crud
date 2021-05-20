@@ -1,3 +1,6 @@
+@if($errors->first($name))
+    {{ $locked = false }}
+@endif
 @if($locked)
     <button
         type="button"
@@ -7,7 +10,7 @@
         Change password
     </button>
 @endif
-<div class="flex items-center w-full" id="password-input-wrapper" style="display: {{ $locked ? 'none' : 'block' }}">
+<div class="flex items-center w-full" id="password-input-wrapper" style="display: {{ $locked ? 'none' : 'flex' }}">
     <div class="w-2/3 relative">
         <input
             type="password"

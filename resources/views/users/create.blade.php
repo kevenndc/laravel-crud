@@ -30,13 +30,8 @@
                         <input type="text" id="email" name="email" placeholder="User e-mail" class="block mb-4 w-full rounded-md" value="{{ old('email') }}" required>
                         {{-- Password --}}
                         <label for="password-input" class="text-xl text-gray-700">Password</label>
-                        <div class="flex items-center max-w-3xl">
-                            <div class="w-2/3">
-                                <x-password-input name="password" id="password-input" />
-                            </div>
-                            <div class="w-1/3 ml-2">
-                                <button type="button" class="p-1 text-sm text-indigo-600" onclick="generatePassword()">Generate password</button>
-                            </div>
+                        <div class="flex items-center">
+                            <x-password-input name="password" id="password-input" generator="true" />
                         </div>
                     </div>
                 </div>

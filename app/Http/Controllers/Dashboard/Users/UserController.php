@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Traits\UserIndexSortableColumns;
 use App\Models\Role;
 use App\Models\User;
@@ -68,13 +69,15 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  UpdateUserRequest $request
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        return true;
+        $validated = $request->validated();
+        $user->update($validated);
+        return redirect(route('users.index'));
     }
 
     /**

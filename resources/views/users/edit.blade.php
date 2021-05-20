@@ -12,7 +12,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
         @method('PUT')
         @csrf
         <div class="flex">
@@ -33,7 +33,7 @@
                         <label for="password-input" class="text-xl text-gray-700">Password</label>
 
                         <div class="flex items-center">
-                                <x-password-input name="password" id="password-input" locked="true" generator="true" />
+                            <x-password-input name="password" id="password-input" locked="true" generator="true" />
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
             <!-- Post options -->
             <div class="w-2/6 max-w-300 flex flex-col bg-white rounded-lg p-4 shadow-md">
                 <div class="flex flex-col items-center mb-8">
-                    <button type="submit" name="save" value="publish" class="py-2 mb-2 table-cell align-middle w-full font-bold text-white border-2 border-blue-500 bg-blue-500 rounded-lg shadow-md duration-200 hover:bg-blue-600 hover:border-blue-600">
+                    <button type="submit" class="py-2 mb-2 table-cell align-middle w-full font-bold text-white border-2 border-blue-500 bg-blue-500 rounded-lg shadow-md duration-200 hover:bg-blue-600 hover:border-blue-600">
                         Update user
                     </button>
                 </div>
