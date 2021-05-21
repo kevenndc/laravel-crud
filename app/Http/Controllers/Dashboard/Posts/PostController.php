@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard\Posts;
 
+use App\Http\Traits\PostIndexSortableColumns;
 use App\Models\Post;
 use App\Services\UploadStorageService;
 use Illuminate\Http\Request;
@@ -9,8 +10,11 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
+
 class PostController extends Controller
 {
+    use PostIndexSortableColumns;
+
     protected $uploadStorage;
 
     public function __construct(UploadStorageService $uploadStorage)
@@ -25,17 +29,10 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $column = $request->get('orderby') ?? 'created_at';
-        $order = $request->get('order') ?? 'desc';
+        $builder = Post::with('user')->withoutTrashed();
+        $posts = $this->fetchPosts($builder);
 
-        $posts = $this->filterPosts($request->get('filter'))
-                    ->orderBy($column, $order)
-                    ->paginate(10);
-
-        return view('posts.index', [
-            'posts' => $posts->withQueryString(),
-            'counts' => Post::getCounts()
-        ]);
+        return view('posts.index')->with('posts', $posts);
     }
 
     /**
@@ -45,7 +42,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create-post');
+        return view('posts.create');
     }
 
     /**
@@ -58,8 +55,8 @@ class PostController extends Controller
     {
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
-        $post = Auth::user()->posts()->create($validated);
-        return redirect()->route('admin.posts.index');
+        Auth::user()->posts()->create($validated);
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -70,7 +67,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit-post')->with('post', $post);
+        return view('posts.edit')->with('post', $post);
     }
 
     /**
@@ -98,30 +95,10 @@ class PostController extends Controller
     {
         if ($post->trashed()) {
             $post->forceDelete();
-        } else {
-            $post->delete();
+            return back();
         }
+        $post->delete();
         return back();
-    }
-
-    /**
-     * Return a list of posts filtered by a giver filter (switch key).
-     *
-     * @param array $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    private function filterPosts($filter)
-    {
-        switch ($filter) {
-            case 'trashed':
-                return Post::onlyTrashed();
-            case 'published':
-                return Post::where('published', true);
-            case 'drafts':
-                return Post::where('published', false);
-            default:
-                return Post::withoutTrashed();
-        }
     }
 
     private function storeFeaturedImage(array &$validated)

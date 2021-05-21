@@ -23,6 +23,7 @@ module.exports = {
         extend: {
             opacity: ['disabled'],
             borderWidth: ['last'],
+            display: ['group-hover'],
         },
     },
 
