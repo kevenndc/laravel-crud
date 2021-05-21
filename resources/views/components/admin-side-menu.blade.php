@@ -14,9 +14,12 @@
         </x-side-menu-item>
         <x-side-menu-item route='posts.index' title='Posts'>
             <x-heroicon-o-newspaper />
-        </x-side-menu-item><x-side-menu-item route='users.index' title='Users'>
-            <x-heroicon-o-user />
         </x-side-menu-item>
+        @can('see-other-users')
+            <x-side-menu-item route='users.index' title='Users'>
+                <x-heroicon-o-user />
+            </x-side-menu-item>
+        @endcan
     </ul>
 </div>
 

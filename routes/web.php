@@ -1,8 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\{PostController, UserController};
-
+use App\Http\Controllers\Dashboard\Users\{
+    UserController,
+    AdminUserController,
+    EditorUserController,
+    AuthorUserController
+};
+use App\Http\Controllers\Dashboard\Posts\{
+    PostController,
+    PublishedPostController,
+    DraftPostController,
+    PostTrashController
+};
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,12 +33,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('layouts.dashboard');
     })->name('dashboard');
 
-    Route::prefix('posts')->group(function () {
-        Route::resource('posts', PostController::class)->except('show');
+    Route::resource('posts', PostController::class)->except('show');
+    Route::middleware('can:see-post')->prefix('/posts')->name('posts.')->group(function () {
+        Route::get('published', [PublishedPostController::class, 'index'])->name('published.index');
+        Route::get('drafts', [DraftPostController::class, 'index'])->name('drafts.index');
+        Route::get('trash', [PostTrashController::class, 'index'])->name('trash.index');
     });
 
-    Route::prefix('users')->group(function () {
-        Route::resource('users', UserController::class)->except('show');
+    Route::resource('users', UserController::class)->except('show');
+    Route::middleware('can:see-other-users')->prefix('/users')->name('users.')->group(function () {
+        Route::get('admins', [AdminUserController::class, 'index'])->name('admins.index');
+        Route::get('editors', [EditorUserController::class, 'index'])->name('editors.index');
+        Route::get('authors', [AuthorUserController::class, 'index'])->name('authors.index');
     });
 });
 

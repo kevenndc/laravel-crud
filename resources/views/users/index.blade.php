@@ -6,12 +6,7 @@
     {{--  Menu  --}}
     <div class="flex justify-between items-center mb-3">
         {{-- Filters --}}
-        <div>
-            <a href="{{ route('users.index') }}" class="text-blue-400 text-sm mr-2">All ()</a>
-            <a href="{{ route('users.index', ['filter' => 'published']) }}" class="text-blue-400 text-sm mr-2">Admins ()</a>
-            <a href="{{ route('users.index', ['filter' => 'drafts']) }}" class="text-blue-400 text-sm mr-2">Editors ()</a>
-            <a href="{{ route('users.index', ['filter' => 'trashed']) }}" class="text-red-500 text-sm">Collaborator ()</a>
-        </div>
+       <x-user-counts />
         <div>
             <a href="{{ route('users.create') }}" class="py-2 px-4 font-bold flex items-center text-white bg-blue-500 rounded-lg shadow-md duration-200 hover:bg-blue-600">
                 <x-heroicon-o-user-add class="w-5 mr-1" />
@@ -21,23 +16,19 @@
     </div>
     {{--  Post List  --}}
     <div class="bg-white rounded-lg p-4 shadow-md">
-        @if($users->isNotEmpty())
+        @if(isset($users))
             <table class="w-full">
                 <thead>
-                <x-sortable-th route="users.index" column="id" class="pl-3 text-left">ID</x-sortable-th>
-                <x-sortable-th route="users.index" column="title" class="px-3 text-left">Name</x-sortable-th>
+                <x-sortable-th route="users.index" column="name" class="px-3 text-left">Name</x-sortable-th>
                 <th class="px-3">E-mail</th>
-                <x-sortable-th route="users.index" column="created_at" class="px-3 text-left text-center">Nº of Posts</x-sortable-th>
+                <x-sortable-th route="users.index" column="posts_count" class="px-3 text-left text-center">Nº of Posts</x-sortable-th>
                 <th class="px-3">Role</th>
+                <x-sortable-th route="users.index" column="created_at" class="px-3 text-left text-center">Date</x-sortable-th>
                 <th class="px-3">Actions</th>
                 </thead>
                 <tbody>
                 @foreach($users as $user)
                     <tr class="w-full border-b border-gray-300 last:border-b-0">
-                        {{-- ID --}}
-                        <td class="py-4 pl-3">
-                            <p>{{ $user->id }}</p>
-                        </td>
                         {{-- Name --}}
                         <td class="py-4 px-3">
                             <a href="{{ route('users.edit', $user) }}">{{ $user->name }}</a>
@@ -48,11 +39,16 @@
                         </td>
                         {{-- Nº of posts --}}
                         <td class="py-4 px-3 text-center">
-                            <a href="#">{{ $user->posts->count() }}</a>
+                            <a href="#">{{ $user->posts_count }}</a>
                         </td>
                         {{-- Role --}}
                         <td class="py-4 px-3 text-center">
-                            <a href="#">{{ $user->role ?? 'Placeholder' }}</a>
+                            <a href="#">{{ $user->role->name ?? 'Placeholder' }}</a>
+                        </td>
+                        {{-- Date --}}
+                        <td class="py-4 px-3">
+                            <span class="block text-gray-500 text-sm">created at</span>
+                            <span class="block text-gray-700 text-">{{ $user->created_at }}</span>
                         </td>
                         {{-- Options --}}
                         <td class="py-4 px-3 w-36">

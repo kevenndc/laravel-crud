@@ -28,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        app()->bind(UploadStorageService::class, LocalUploadStorageService::class);
+        $this->app->bind(UploadStorageService::class, LocalUploadStorageService::class);
     }
 }

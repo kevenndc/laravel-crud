@@ -22,7 +22,7 @@ class Post extends Model
         'excerpt',
         'is_featured',
         'featured_image',
-        'published',
+        'status',
     ];
 
     protected $dates = [
@@ -80,15 +80,22 @@ class Post extends Model
         $this->attributes['slug'] = $value;
     }
 
+    public function hasAttribute(string $attribute)
+    {
+        return array_key_exists($attribute, $this->attributes);
+    }
+
     /**
      * Handles the publishing of a post by also setting the published date.
      *
      * @param bool $value
      */
-    public function setPublishedAttribute(bool $value)
+    public function setStatusAttribute($value)
     {
-        $this->attributes['published'] = $value;
-        $this->setPublishedAtAttribute($value);
+        if ($value === 'published') {
+            $this->setPublishedAtAttribute($value);
+        }
+        $this->attributes['status'] = $value;
     }
 
     /**
@@ -101,6 +108,12 @@ class Post extends Model
         if ($value && !isset($this->published_at)) {
             $this->attributes['published_at'] = now();
         }
+    }
+
+    public function setDeletedAtAttribute($value)
+    {
+        $this->setStatusAttribute('trashed');
+        $this->attributes['deleted_at'] = $value;
     }
 
     /**
@@ -130,22 +143,8 @@ class Post extends Model
     public function getRelatedSlugs($slug)
     {
         return static::where('slug', 'LIKE', "{$slug}%")
-                        ->where('id', '<>', $this->id)
-                        ->pluck('slug')
-                        ->toArray();
-    }
-
-    /**
-     * Get the total number of posts and the number of posts for each status (published, draft, trashed).
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public static function getCounts() {
-        return collect([
-            'posts' => static::all()->count(),
-            'published' => static::where('published', 1)->count(),
-            'drafts' => static::where('published', 0)->count(),
-            'trashed' => static::onlyTrashed()->count(),
-        ]);
+            ->where('id', '<>', $this->id)
+            ->pluck('slug')
+            ->toArray();
     }
 }

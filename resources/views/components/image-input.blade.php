@@ -1,7 +1,7 @@
 <div class="mb-3 {{ $imageClasses }}">
     <img id="img-preview" src="{{ $value ?? '' }}" class="object-cover h-full mx-auto">
 </div>
-<label for="{{ $name }}" class="cursor-pointer text-gray-500 border-2 border-blue-500 rounded-md">
+<label for="{{ $name }}" class="block cursor-pointer text-gray-500 border-2 border-blue-500 rounded-md">
     <div class="btn-img-input {{ $value ? 'has-image' : '' }}" id="btn-img-input">
         <x-heroicon-o-cloud-upload class="w-8 text-blue-500" id="label-icon" />
         <span id="img-label-text" class="block font-bold text-center">{{ $value ? 'Change image' : $label }}</span>

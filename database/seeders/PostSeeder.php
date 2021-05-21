@@ -17,7 +17,7 @@ class PostSeeder extends Seeder
     {
         Post::factory()
             ->count(20)
-            ->for(User::factory()->create())
+            ->for(User::find(1))
             ->create();
     }
 }

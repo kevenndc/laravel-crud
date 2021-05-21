@@ -1,6 +1,6 @@
 <div {{ $attributes->merge(['class' => 'w-full']) }}>
     <label for="{{ $name }}" class="flex items-center justify-between cursor-pointer">
-        <span class="mr-3 text-gray-900 text-lg font-bold">
+        <span class="mr-3">
             {{ $label }}
         </span>
         <div class="relative">
