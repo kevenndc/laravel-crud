@@ -27,7 +27,7 @@ class UserController extends Controller
         $builder = User::with('role');
         $users = $this->fetchUsers($builder);
 
-        return view('users.index')->with('users', $users);
+        return view('users.index')->with(compact('users'));
     }
 
     /**
