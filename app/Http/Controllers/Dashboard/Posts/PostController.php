@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard\Posts;
 
+use App\Helpers\Message;
 use App\Http\Traits\PostIndexSortableColumns;
 use App\Models\Post;
 use App\Services\UploadStorageService;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 
 class PostController extends Controller
@@ -75,14 +77,18 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Post  $post
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function update(PostRequest $request, Post $post)
     {
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
         $post->update($validated);
-        return back();
+        return view('posts.edit', [
+            'post' => $post,
+            'messageType' => Message::SUCCESS,
+            'messageText' => 'The post was successfully updated!'
+        ]);
     }
 
     /**
