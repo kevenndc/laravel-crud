@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 
@@ -34,7 +35,11 @@ class PostController extends Controller
         $builder = Post::with('user')->withoutTrashed();
         $posts = $this->fetchPosts($builder);
 
-        return view('posts.index')->with('posts', $posts);
+        return view('posts.index', [
+            'posts' => $posts,
+            'messageType' => Session::get('messageType'),
+            'messageText' => Session::get('messageText'),
+        ]);
     }
 
     /**
@@ -51,14 +56,17 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  PostRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(PostRequest $request)
     {
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
         Auth::user()->posts()->create($validated);
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with([
+            'messageType' => Message::SUCCESS,
+            'messageText' => 'The post was successfully updated!',
+        ]);
     }
 
     /**
@@ -87,7 +95,7 @@ class PostController extends Controller
         return view('posts.edit', [
             'post' => $post,
             'messageType' => Message::SUCCESS,
-            'messageText' => 'The post was successfully updated!'
+            'messageText' => 'The post was successfully updated!',
         ]);
     }
 
