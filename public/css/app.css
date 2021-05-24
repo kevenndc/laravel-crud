@@ -31625,6 +31625,26 @@ select {
   }
 }
 
+@-webkit-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
 .animate-none {
   -webkit-animation: none;
           animation: none;
@@ -31648,6 +31668,11 @@ select {
 .animate-bounce {
   -webkit-animation: bounce 1s infinite;
           animation: bounce 1s infinite;
+}
+
+.animate-fadeOut {
+  -webkit-animation: fadeOut 200ms ease;
+          animation: fadeOut 200ms ease;
 }
 
 .mix-blend-normal {
@@ -63182,6 +63207,11 @@ select {
             animation: bounce 1s infinite;
   }
 
+  .sm\:animate-fadeOut {
+    -webkit-animation: fadeOut 200ms ease;
+            animation: fadeOut 200ms ease;
+  }
+
   .sm\:mix-blend-normal {
     mix-blend-mode: normal;
   }
@@ -94547,6 +94577,11 @@ select {
   .md\:animate-bounce {
     -webkit-animation: bounce 1s infinite;
             animation: bounce 1s infinite;
+  }
+
+  .md\:animate-fadeOut {
+    -webkit-animation: fadeOut 200ms ease;
+            animation: fadeOut 200ms ease;
   }
 
   .md\:mix-blend-normal {
@@ -125916,6 +125951,11 @@ select {
             animation: bounce 1s infinite;
   }
 
+  .lg\:animate-fadeOut {
+    -webkit-animation: fadeOut 200ms ease;
+            animation: fadeOut 200ms ease;
+  }
+
   .lg\:mix-blend-normal {
     mix-blend-mode: normal;
   }
@@ -157283,6 +157323,11 @@ select {
             animation: bounce 1s infinite;
   }
 
+  .xl\:animate-fadeOut {
+    -webkit-animation: fadeOut 200ms ease;
+            animation: fadeOut 200ms ease;
+  }
+
   .xl\:mix-blend-normal {
     mix-blend-mode: normal;
   }
@@ -188648,6 +188693,11 @@ select {
   .\32xl\:animate-bounce {
     -webkit-animation: bounce 1s infinite;
             animation: bounce 1s infinite;
+  }
+
+  .\32xl\:animate-fadeOut {
+    -webkit-animation: fadeOut 200ms ease;
+            animation: fadeOut 200ms ease;
   }
 
   .\32xl\:mix-blend-normal {
