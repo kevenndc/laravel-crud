@@ -2,11 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\Post;
-use App\Observers\PostObserver;
+use App\Services\FlashMessagesService;
 use App\Services\LocalUploadStorageService;
+use App\Services\MessageNotificationService;
 use App\Services\UploadStorageService;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->bind(UploadStorageService::class, LocalUploadStorageService::class);
+        $this->app->bind(MessageNotificationService::class, FlashMessagesService::class);
     }
 }
