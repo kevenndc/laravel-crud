@@ -104,11 +104,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if ($post->trashed()) {
+        if (! $post->delete()) {
             $post->forceDelete();
-            return back();
         }
-        $post->delete();
         return back();
     }
 

@@ -16,8 +16,16 @@ class PostSeeder extends Seeder
     public function run()
     {
         Post::factory()
-            ->count(20)
+            ->count(15)
             ->for(User::find(1))
             ->create();
+
+        Post::factory()
+            ->count(5)
+            ->for(User::find(1))
+            ->create([
+                'status' => 'trashed',
+                'deleted_at' => now()
+            ]);
     }
 }

@@ -12,9 +12,8 @@ class PostTrashController extends Controller
 
     public function index()
     {
-        $posts = Post::with('user')->onlyTrashed();
-        $posts = $this->fetchPosts($posts);
-
+        $builder = Post::with('user')->onlyTrashed();
+        $posts = $this->fetchPosts($builder);
         return view('posts.index')->with('posts', $posts);
     }
 }

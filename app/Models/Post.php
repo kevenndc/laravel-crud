@@ -28,7 +28,19 @@ class Post extends Model
     protected $dates = [
         'created_at',
         'published_at',
+        'deleted_at',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // automatically changes the post status to 'trashed' when soft deleting
+        static::deleting(function ($post) {
+            $post->status = 'trashed';
+            $post->save();
+        });
+    }
 
     /**
      * The post author.
@@ -90,12 +102,12 @@ class Post extends Model
      *
      * @param bool $value
      */
-    public function setStatusAttribute($value)
+    public function setStatusAttribute($status)
     {
-        if ($value === 'published') {
-            $this->setPublishedAtAttribute($value);
+        if ($status === 'published') {
+            $this->setPublishedAtAttribute($status);
         }
-        $this->attributes['status'] = $value;
+        $this->attributes['status'] = $status;
     }
 
     /**
@@ -108,12 +120,6 @@ class Post extends Model
         if ($value && !isset($this->published_at)) {
             $this->attributes['published_at'] = now();
         }
-    }
-
-    public function setDeletedAtAttribute($value)
-    {
-        $this->setStatusAttribute('trashed');
-        $this->attributes['deleted_at'] = $value;
     }
 
     /**

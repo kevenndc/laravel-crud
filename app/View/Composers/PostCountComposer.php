@@ -3,6 +3,7 @@
 namespace App\View\Composers;
 
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -17,19 +18,24 @@ class PostCountComposer
      */
     public function compose(View $view)
     {
-        $builder = Post::query();
+        $builder = Post::withTrashed();
 
         if (Gate::denies('see-others-posts')) {
             $builder->where('user_id', Auth::user()->id);
         }
 
+        $counts = $this->getCounts($builder);
+
+        $view->with('counts', $counts);
+    }
+
+    private function getCounts(Builder $builder)
+    {
         $counts = $builder->select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->get()
             ->pluck('total', 'status');
 
-        $counts = $counts->merge(['all' => $counts->sum()])->toArray();
-
-        $view->with('counts', $counts);
+        return $counts->merge(['all' => $counts->sum()])->toArray();
     }
 }
