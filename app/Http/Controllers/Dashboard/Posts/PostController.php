@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Dashboard\Posts;
 
-use App\Helpers\Message;
 use App\Http\Traits\PostIndexSortableColumns;
 use App\Models\Post;
+use App\Services\MessageNotificationService;
 use App\Services\UploadStorageService;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
@@ -19,10 +19,12 @@ class PostController extends Controller
     use PostIndexSortableColumns;
 
     protected $uploadStorage;
+    protected $messages;
 
-    public function __construct(UploadStorageService $uploadStorage)
+    public function __construct(UploadStorageService $uploadStorage, MessageNotificationService $messages)
     {
         $this->uploadStorage = $uploadStorage->inDirectory('images/posts');
+        $this->messages = $messages;
     }
 
     /**
@@ -63,10 +65,8 @@ class PostController extends Controller
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
         Auth::user()->posts()->create($validated);
-        return redirect()->route('posts.index')->with([
-            'messageType' => Message::SUCCESS,
-            'messageText' => 'The post was successfully updated!',
-        ]);
+        $this->messages->showSuccess('The post was successfully created!');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -92,11 +92,8 @@ class PostController extends Controller
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
         $post->update($validated);
-        return view('posts.edit', [
-            'post' => $post,
-            'messageType' => Message::SUCCESS,
-            'messageText' => 'The post was successfully updated!',
-        ]);
+        $this->messages->showSuccess('The post was successfully updated!');
+        return view('posts.edit', ['post' => $post]);
     }
 
     /**
