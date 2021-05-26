@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard\Posts;
 use App\Http\Traits\PostIndexSortableColumns;
 use App\Models\Post;
 use App\Services\MessageNotificationService;
-use App\Services\UploadStorageService;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
@@ -18,12 +17,10 @@ class PostController extends Controller
 {
     use PostIndexSortableColumns;
 
-    protected $uploadStorage;
     protected $messages;
 
-    public function __construct(UploadStorageService $uploadStorage, MessageNotificationService $messages)
+    public function __construct(MessageNotificationService $messages)
     {
-        $this->uploadStorage = $uploadStorage->inDirectory('images/posts');
         $this->messages = $messages;
     }
 
@@ -63,7 +60,6 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $validated = $request->validated();
-        $this->storeFeaturedImage($validated);
         Auth::user()->posts()->create($validated);
         $this->messages->showSuccess('The post was successfully created!');
         return redirect()->route('posts.index');
@@ -90,7 +86,6 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $validated = $request->validated();
-        $this->storeFeaturedImage($validated);
         $post->update($validated);
         $this->messages->showSuccess('The post was successfully updated!');
         return view('posts.edit', ['post' => $post]);
@@ -107,13 +102,5 @@ class PostController extends Controller
         $post->delete();
         $this->messages->showSuccess('The post was moved to trash.');
         return redirect()->back();
-    }
-
-    private function storeFeaturedImage(array &$validated)
-    {
-        if (! isset($validated['featured_image'])) {
-            return;
-        }
-        $validated['featured_image'] = $this->uploadStorage->store($validated['featured_image'])->save();
     }
 }

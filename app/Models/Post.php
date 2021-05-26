@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\LocalUploadStorageService;
 use App\Services\UploadStorageService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -101,6 +100,14 @@ class Post extends Model
     public function hasAttribute(string $attribute)
     {
         return array_key_exists($attribute, $this->attributes);
+    }
+
+    public function setFeaturedImageAttribute($featuredImage)
+    {
+        $this->attributes['featured_image'] = resolve(UploadStorageService::class)
+            ->inDirectory('images/posts')
+            ->store($featuredImage)
+            ->save();
     }
 
     /**
