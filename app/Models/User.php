@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\UploadStorageService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'role_id',
+        'profile_image',
     ];
 
     /**
@@ -46,6 +48,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'posts_count'
     ];
+
+    public const DEFAULT_PROFILE_IMAGE = '/images/users/default-avatar.jpeg';
 
     /**
      * The user role.
@@ -99,5 +103,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function setRoleAttribute($role)
     {
         $this->attributes['role_id'] = $role;
+    }
+
+    public function setProfileImageAttribute($profileImage)
+    {
+        $this->attributes['profile_image'] = resolve(UploadStorageService::class)
+            ->store($profileImage)
+            ->inDirectory('images/users')
+            ->save();
     }
 }

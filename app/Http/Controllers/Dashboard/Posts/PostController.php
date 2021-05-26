@@ -84,7 +84,7 @@ class PostController extends Controller
         $validated = $request->validated();
         $post->update($validated);
         $this->messages->showSuccess('The post was successfully updated!');
-        return view('posts.edit', ['post' => $post]);
+        return view('posts.edit')->with('post', $post);
     }
 
     /**

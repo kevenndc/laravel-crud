@@ -4,7 +4,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class LocalUploadStorageService implements UploadStorageService
+final class LocalUploadStorageService implements UploadStorageService
 {
     private $file;
     private $path;
@@ -67,7 +67,7 @@ class LocalUploadStorageService implements UploadStorageService
         return $this;
     }
 
-    protected function setPath(string $fileName)
+    private function setPath(string $fileName)
     {
         $this->path = "{$this->directory}/{$fileName}";
     }
@@ -78,7 +78,7 @@ class LocalUploadStorageService implements UploadStorageService
      * @param string $fileName
      * @return string
      */
-    protected function getAvailableName(string $fileName)
+    private function getAvailableName(string $fileName)
     {
         $fileName = $fileName ?? $this->fileName;
         if (Storage::exists($this->path)) {
@@ -94,7 +94,7 @@ class LocalUploadStorageService implements UploadStorageService
      * @param string $fileName
      * @return string
      */
-    protected function suffixWithNumber(string $fileName)
+    private function suffixWithNumber(string $fileName)
     {
         $name = pathinfo($fileName, PATHINFO_FILENAME);
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -107,7 +107,7 @@ class LocalUploadStorageService implements UploadStorageService
         return $newName;
     }
 
-    protected function makeFileName(string $fileName)
+    private function makeFileName(string $fileName)
     {
         $name = pathinfo($fileName, PATHINFO_FILENAME);
         $name = Str::slug($name);

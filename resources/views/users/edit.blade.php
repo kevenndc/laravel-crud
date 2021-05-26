@@ -20,7 +20,7 @@
             <div class="w-full bg-white rounded-lg p-4 mr-6 shadow-md">
                 <div class="flex">
                     <div class="w-64 mr-7">
-                        <x-user-profile-image-input name="edit avatar" />
+                        <x-user-profile-image-input name="profile_image" value="{{ url($user->profile_image) }}" />
                     </div>
                     <div class="w-full">
                         {{-- Name --}}

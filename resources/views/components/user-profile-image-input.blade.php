@@ -1,6 +1,5 @@
-
 <div class="h-56 w-56 relative group mx-auto">
-    <img id="img-preview" src="{{ $value ?? '/images/users/default-avatar.jpeg' }}" class="object-cover object-center h-full rounded-full mx-auto">
+    <img id="img-preview" src="{{ $value ?? \App\Models\User::DEFAULT_PROFILE_IMAGE }}" class="object-cover object-center w-full h-full rounded-full mx-auto">
     <label for="{{ $name }}" class="hidden absolute top-0 bg-black bg-opacity-50 cursor-pointer text-white rounded-full w-full h-full group-hover:flex items-center justify-center">
         <div class="btn-img-input flex flex-col text-white" id="btn-img-input">
             <x-heroicon-o-cloud-upload class="w-8 " id="label-icon" />
