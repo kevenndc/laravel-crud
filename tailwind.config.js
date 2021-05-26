@@ -14,9 +14,19 @@ module.exports = {
                 logo: ['Raleway'],
             },
             maxWidth: {
+                '100': '100px',
                 '200': '200px',
                 '300': '300px',
             },
+            keyframes: {
+                fadeOut: {
+                    'from': { opacity: 1 },
+                    'to': { opacity: 0 },
+                }
+            },
+            animation: {
+                fadeOut: 'fadeOut 200ms ease',
+            }
         },
     },
     variants: {

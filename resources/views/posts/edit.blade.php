@@ -39,7 +39,7 @@
                     </button>
                 </div>
                 <x-toggle-button name="is_featured" label="Is featured?" class="mb-7" />
-                <x-image-input name="featured_image" label="Select a featured image" value="{{ url($post->featured_image) }}" class="block w-full" imageClasses="max-h-48" />
+                <x-image-input name="featured_image" label="Select a featured image" value="{{ $post->featured_image ? url($post->featured_image) : '' }}" class="block w-full" imageClasses="max-h-48" />
             </div>
         </div>
 </form>

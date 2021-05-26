@@ -11,7 +11,7 @@ use App\Http\Controllers\Dashboard\Posts\{
     PostController,
     PublishedPostController,
     DraftPostController,
-    PostTrashController
+    TrashedPostController
 };
 /*
 |--------------------------------------------------------------------------
@@ -34,10 +34,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('posts', PostController::class)->except('show');
+
     Route::middleware('can:see-post')->prefix('/posts')->name('posts.')->group(function () {
+
+        Route::resource('trash', TrashedPostController::class)->only(['index', 'destroy', 'update']);
+
         Route::get('published', [PublishedPostController::class, 'index'])->name('published.index');
         Route::get('drafts', [DraftPostController::class, 'index'])->name('drafts.index');
-        Route::get('trash', [PostTrashController::class, 'index'])->name('trash.index');
     });
 
     Route::resource('users', UserController::class)->except('show');
