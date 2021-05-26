@@ -43,19 +43,35 @@
                             <a href="#">{{ Str::words($post->user->name, 3, '') }}</a>
                         </td>
                         {{-- Options --}}
-                        <td class="py-4 px-3 w-36">
-                            <div class="flex justify-between">
+                        <td class="py-4 px-3 w-48">
+                            <div class="flex justify-evenly">
                                 <div class="text-center">
-                                    <a href="{{ route('posts.edit', $post) }}" class="text-blue-400"><x-heroicon-o-pencil-alt class="w-5 inline-block" /> Edit</a>
+                                    <a href="{{ route('posts.edit', $post) }}" class="text-blue-400 flex flex-col items-center "><x-heroicon-o-pencil-alt class="w-5 inline-block" /> Edit</a>
                                 </div>
                                 <div class="flex">
-                                    <form action="{{ route('posts.destroy', $post) }}" method="POST" class="flex">
+                                    <form action="{{
+                                        Route::is('posts.trash.index')
+                                            ? route('posts.trash.destroy', $post)
+                                            : route('posts.destroy', $post)
+                                        }}" method="POST" class="flex"
+                                    >
                                         @method('DELETE')
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $post }}">
-                                        <button type="submit" class="text-red-500"><x-heroicon-o-trash class="w-5 inline-block" /> Delete</button>
+                                        <button type="submit" class="flex flex-col items-center text-red-500"><x-heroicon-o-trash class="w-5 inline-block" /> Delete</button>
                                     </form>
                                 </div>
+                                @if (Route::is('posts.trash.index'))
+                                    <div class="flex">
+                                        <form action="{{ route('posts.trash.update', $post) }}" method="POST" class="flex"
+                                        >
+                                            @method('PUT')
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $post }}">
+                                            <button type="submit" class="text-green-300 flex flex-col items-center "><x-heroicon-o-refresh class="w-5 inline-block" /> Restore</button>
+                                        </form>
+                                    </div>
+                                @endif
                             </div>
                         </td>
                     </tr>

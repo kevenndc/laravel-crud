@@ -97,17 +97,16 @@ class PostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Move the specified post to trash.
      *
      * @param  Post $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Post $post)
     {
-        if (! $post->delete()) {
-            $post->forceDelete();
-        }
-        return back();
+        $post->delete();
+        $this->messages->showSuccess('The post was moved to trash.');
+        return redirect()->back();
     }
 
     private function storeFeaturedImage(array &$validated)

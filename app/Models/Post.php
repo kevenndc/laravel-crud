@@ -40,6 +40,12 @@ class Post extends Model
             $post->status = 'trashed';
             $post->save();
         });
+
+        // automatically changes the post status to 'draft' when restoring
+        static::restoring(function ($post) {
+            $post->status = 'draft';
+            $post->save();
+        });
     }
 
     /**

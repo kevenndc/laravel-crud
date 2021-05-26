@@ -14,6 +14,7 @@ module.exports = {
                 logo: ['Raleway'],
             },
             maxWidth: {
+                '100': '100px',
                 '200': '200px',
                 '300': '300px',
             },
