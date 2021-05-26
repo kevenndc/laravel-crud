@@ -28,7 +28,7 @@ class PostFactory extends Factory
             'excerpt' => $this->faker->paragraph(),
             'is_featured' => $this->faker->boolean(),
             'featured_image' => $this->faker->imageUrl(768, 768,'Post Featured Image', true),
-            'status' => $this->faker->randomElement(['published', 'draft', 'trashed']),
+            'status' => $this->faker->randomElement(['published', 'draft']),
         ];
     }
 }

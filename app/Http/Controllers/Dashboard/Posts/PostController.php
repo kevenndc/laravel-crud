@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Dashboard\Posts;
 
 use App\Http\Traits\PostIndexSortableColumns;
 use App\Models\Post;
+use App\Services\MessageNotificationService;
 use App\Services\UploadStorageService;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
 
 class PostController extends Controller
@@ -16,10 +19,12 @@ class PostController extends Controller
     use PostIndexSortableColumns;
 
     protected $uploadStorage;
+    protected $messages;
 
-    public function __construct(UploadStorageService $uploadStorage)
+    public function __construct(UploadStorageService $uploadStorage, MessageNotificationService $messages)
     {
         $this->uploadStorage = $uploadStorage->inDirectory('images/posts');
+        $this->messages = $messages;
     }
 
     /**
@@ -32,7 +37,11 @@ class PostController extends Controller
         $builder = Post::with('user')->withoutTrashed();
         $posts = $this->fetchPosts($builder);
 
-        return view('posts.index')->with('posts', $posts);
+        return view('posts.index', [
+            'posts' => $posts,
+            'messageType' => Session::get('messageType'),
+            'messageText' => Session::get('messageText'),
+        ]);
     }
 
     /**
@@ -49,13 +58,14 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  PostRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(PostRequest $request)
     {
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
         Auth::user()->posts()->create($validated);
+        $this->messages->showSuccess('The post was successfully created!');
         return redirect()->route('posts.index');
     }
 
@@ -75,30 +85,28 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Post  $post
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function update(PostRequest $request, Post $post)
     {
         $validated = $request->validated();
         $this->storeFeaturedImage($validated);
         $post->update($validated);
-        return back();
+        $this->messages->showSuccess('The post was successfully updated!');
+        return view('posts.edit', ['post' => $post]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Move the specified post to trash.
      *
      * @param  Post $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Post $post)
     {
-        if ($post->trashed()) {
-            $post->forceDelete();
-            return back();
-        }
         $post->delete();
-        return back();
+        $this->messages->showSuccess('The post was moved to trash.');
+        return redirect()->back();
     }
 
     private function storeFeaturedImage(array &$validated)

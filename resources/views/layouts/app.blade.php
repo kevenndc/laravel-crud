@@ -18,6 +18,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 <body class="font-sans antialiased">
+    @include('layouts.message')
 <div class="max-h-screen bg-gray-100 overflow-hidden">
     <!-- Page Content -->
     <main>
