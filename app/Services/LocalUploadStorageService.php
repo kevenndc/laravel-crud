@@ -1,25 +1,26 @@
 <?php
 namespace App\Services;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 final class LocalUploadStorageService implements UploadStorageService
 {
-    private $file;
-    private $path;
-    private $fileName;
-    private $directory;
-    private $canOverwrite = false;
+    private UploadedFile $file;
+    private string $path;
+    private string $fileName;
+    private string $directory;
+    private bool $canOverwrite = false;
 
 
     /**
-     * Saves the file related date in the object instance.
+     * Sets the file that should be be saved.
      *
-     * @param \Illuminate\Http\UploadedFile $file
+     * @param UploadedFile $file
      * @return $this
      */
-    public function store(\Illuminate\Http\UploadedFile $file)
+    public function store(UploadedFile $file)
     {
         $this->file = $file;
         $this->fileName = $this->makeFileName($file->getClientOriginalName());
@@ -27,7 +28,7 @@ final class LocalUploadStorageService implements UploadStorageService
     }
 
     /**
-     * Saves the directory which the file should be saved.
+     * Sets the directory in which the file should be saved.
      *
      * @param string $directory
      * @return $this

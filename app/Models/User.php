@@ -49,6 +49,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'posts_count'
     ];
 
+    /**
+     * The path to the default profile image for users.
+     *
+     * @var string
+     */
     public const DEFAULT_PROFILE_IMAGE = '/images/users/default-avatar.jpeg';
 
     /**
@@ -95,7 +100,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $value;
     }
 
-    public function setPasswordAttribute($password)
+    /**
+     * Encrypts the password before saving in the database.
+     *
+     * @param string $password - The raw password.
+     */
+    public function setPasswordAttribute(string $password)
     {
         $this->attributes['password'] = bcrypt($password);
     }
@@ -105,7 +115,12 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->attributes['role_id'] = $role;
     }
 
-    public function setProfileImageAttribute($profileImage)
+    /**
+     * Stores the user's profile image in a Storage and save the path in the database.
+     *
+     * @param \Illuminate\Http\UploadedFile $profileImage
+     */
+    public function setProfileImageAttribute(\Illuminate\Http\UploadedFile $profileImage)
     {
         $this->attributes['profile_image'] = resolve(UploadStorageService::class)
             ->store($profileImage)
