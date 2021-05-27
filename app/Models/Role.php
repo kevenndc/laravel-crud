@@ -20,7 +20,7 @@ class Role extends Model
     }
 
     /**
-     * Users with whit this role.
+     * Users with this role.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -30,6 +30,8 @@ class Role extends Model
     }
 
     /**
+     * Checks if the role has a given permission.
+     *
      * @param string $name
      * @return mixed
      */

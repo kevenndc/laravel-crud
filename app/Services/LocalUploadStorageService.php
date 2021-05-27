@@ -108,6 +108,12 @@ final class LocalUploadStorageService implements UploadStorageService
         return $newName;
     }
 
+    /**
+     * Apply the slug pattern into the file name.
+     *
+     * @param string $fileName
+     * @return string
+     */
     private function makeFileName(string $fileName)
     {
         $name = pathinfo($fileName, PATHINFO_FILENAME);
