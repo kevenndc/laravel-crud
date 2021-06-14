@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\UploadStorageService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'role_id',
+        'profile_image',
     ];
 
     /**
@@ -46,6 +48,13 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'posts_count'
     ];
+
+    /**
+     * The path to the default profile image for users.
+     *
+     * @var string
+     */
+    public const DEFAULT_PROFILE_IMAGE = '/images/users/default-avatar.jpeg';
 
     /**
      * The user role.
@@ -74,7 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getPostsCountAttribute()
     {
-        return $this->posts()->count();
+        return $this->posts->count();
     }
 
     /**
@@ -91,7 +100,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $value;
     }
 
-    public function setPasswordAttribute($password)
+    /**
+     * Encrypts the password before saving in the database.
+     *
+     * @param string $password - The raw password.
+     */
+    public function setPasswordAttribute(string $password)
     {
         $this->attributes['password'] = bcrypt($password);
     }
@@ -99,5 +113,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function setRoleAttribute($role)
     {
         $this->attributes['role_id'] = $role;
+    }
+
+    /**
+     * Stores the user's profile image in a Storage and save the path in the database.
+     *
+     * @param \Illuminate\Http\UploadedFile $profileImage
+     */
+    public function setProfileImageAttribute(\Illuminate\Http\UploadedFile $profileImage)
+    {
+        $this->attributes['profile_image'] = resolve(UploadStorageService::class)
+            ->store($profileImage)
+            ->inDirectory('images/users')
+            ->save();
     }
 }

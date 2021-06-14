@@ -1,25 +1,26 @@
 <?php
 namespace App\Services;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class LocalUploadStorageService implements UploadStorageService
+final class LocalUploadStorageService implements UploadStorageService
 {
-    private $file;
-    private $path;
-    private $fileName;
-    private $directory;
-    private $canOverwrite = false;
+    private UploadedFile $file;
+    private string $path;
+    private string $fileName;
+    private string $directory;
+    private bool $canOverwrite = false;
 
 
     /**
-     * Saves the file related date in the object instance.
+     * Sets the file that should be be saved.
      *
-     * @param \Illuminate\Http\UploadedFile $file
+     * @param UploadedFile $file
      * @return $this
      */
-    public function store(\Illuminate\Http\UploadedFile $file)
+    public function store(UploadedFile $file)
     {
         $this->file = $file;
         $this->fileName = $this->makeFileName($file->getClientOriginalName());
@@ -27,7 +28,7 @@ class LocalUploadStorageService implements UploadStorageService
     }
 
     /**
-     * Saves the directory which the file should be saved.
+     * Sets the directory in which the file should be saved.
      *
      * @param string $directory
      * @return $this
@@ -67,7 +68,7 @@ class LocalUploadStorageService implements UploadStorageService
         return $this;
     }
 
-    protected function setPath(string $fileName)
+    private function setPath(string $fileName)
     {
         $this->path = "{$this->directory}/{$fileName}";
     }
@@ -78,7 +79,7 @@ class LocalUploadStorageService implements UploadStorageService
      * @param string $fileName
      * @return string
      */
-    protected function getAvailableName(string $fileName)
+    private function getAvailableName(string $fileName)
     {
         $fileName = $fileName ?? $this->fileName;
         if (Storage::exists($this->path)) {
@@ -94,7 +95,7 @@ class LocalUploadStorageService implements UploadStorageService
      * @param string $fileName
      * @return string
      */
-    protected function suffixWithNumber(string $fileName)
+    private function suffixWithNumber(string $fileName)
     {
         $name = pathinfo($fileName, PATHINFO_FILENAME);
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -107,7 +108,13 @@ class LocalUploadStorageService implements UploadStorageService
         return $newName;
     }
 
-    protected function makeFileName(string $fileName)
+    /**
+     * Apply the slug pattern into the file name.
+     *
+     * @param string $fileName
+     * @return string
+     */
+    private function makeFileName(string $fileName)
     {
         $name = pathinfo($fileName, PATHINFO_FILENAME);
         $name = Str::slug($name);

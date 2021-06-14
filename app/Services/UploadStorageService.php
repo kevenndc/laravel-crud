@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Database\Eloquent\Model;
-
 interface UploadStorageService
 {
     /**
-     * Saves the file related date in the object instance.
+     * Sets the file that should be be saved.
      *
      * @param \Illuminate\Http\UploadedFile $file
      * @return $this
@@ -15,7 +13,7 @@ interface UploadStorageService
     public function store(\Illuminate\Http\UploadedFile $file);
 
     /**
-     * Saves the directory which the file should be saved.
+     * Sets the directory in which the file should be saved.
      *
      * @param string $directory
      * @return $this

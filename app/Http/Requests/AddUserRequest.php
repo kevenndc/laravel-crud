@@ -48,7 +48,7 @@ class AddUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.regex' => 'The name must no contain numbers or special characters.',
+            'name.regex' => 'The name must not contain numbers or special characters.',
         ];
     }
 }

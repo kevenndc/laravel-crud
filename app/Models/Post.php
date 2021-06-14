@@ -105,8 +105,8 @@ class Post extends Model
     public function setFeaturedImageAttribute($featuredImage)
     {
         $this->attributes['featured_image'] = resolve(UploadStorageService::class)
-            ->inDirectory('images/posts')
             ->store($featuredImage)
+            ->inDirectory('images/posts')
             ->save();
     }
 

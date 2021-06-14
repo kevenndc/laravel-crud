@@ -18,7 +18,7 @@ class PostCountComposer
      */
     public function compose(View $view)
     {
-        $builder = Post::withTrashed();
+        $builder = Post::with('user')->withTrashed();
 
         if (Gate::denies('see-others-posts')) {
             $builder->where('user_id', Auth::user()->id);

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 
@@ -34,11 +33,7 @@ class PostController extends Controller
         $builder = Post::with('user')->withoutTrashed();
         $posts = $this->fetchPosts($builder);
 
-        return view('posts.index', [
-            'posts' => $posts,
-            'messageType' => Session::get('messageType'),
-            'messageText' => Session::get('messageText'),
-        ]);
+        return view('posts.index')->with('posts', $posts);
     }
 
     /**
@@ -88,7 +83,7 @@ class PostController extends Controller
         $validated = $request->validated();
         $post->update($validated);
         $this->messages->showSuccess('The post was successfully updated!');
-        return view('posts.edit', ['post' => $post]);
+        return view('posts.edit')->with('post', $post);
     }
 
     /**
