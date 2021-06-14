@@ -13,29 +13,36 @@ trait PostIndexSortableColumns
         'created_at',
     ];
 
+    /**
+     * Fetch all sorted posts that the user is allowed to see.
+     * @param Builder $builder
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function fetchPosts(Builder $builder)
     {
         if (Gate::denies('see-others-posts')) {
             $builder->where('user_id', Auth::user()->id);
         }
-        return $this->sortColumns($builder)->paginate(10)->withQueryString();
+        return $this->sortPosts($builder)->paginate(10)->withQueryString();
     }
 
-    public function sortColumns(Builder $builder)
+    /**
+     * Sort the posts by the column and order given by a query string.
+     *
+     * @param Builder $builder
+     * @return Builder
+     */
+    public function sortPosts(Builder $builder)
     {
-        $params = $this->fetchParams();
-        return $builder->orderBy($params['column'], $params['order']);
+        return $builder->orderBy($this->getColumn(), $this->getOrder());
     }
 
-    private function fetchParams() {
-        $column = in_array(request()->get('orderby'), $this->columns)
-            ? request()->get('orderby')
-            : 'created_at';
+    private function getColumn() {
+        return $this->columns[request()->get('orderby')] ?? 'created_at';
+    }
 
-        $order = in_array(request()->get('order'), ['asc', 'desc'])
-            ? request()->get('order')
-            : 'desc';
-
-        return compact(['column', 'order']);
+    private function getOrder() {
+        $orders = ['asc', 'desc'];
+        return $orders[request()->get('order')] ?? 'desc';
     }
 }

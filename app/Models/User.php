@@ -83,7 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getPostsCountAttribute()
     {
-        return $this->posts()->count();
+        return $this->posts->count();
     }
 
     /**
