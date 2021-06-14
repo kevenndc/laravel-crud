@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\Posts\{
     DraftPostController,
     TrashedPostController
 };
+use App\Http\Controllers\Site\BlogController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,7 +53,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 route::middleware(['guest'])->group(function () {
-    Route::get('blog/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('blog', [BlogController::class, 'index'])->name('blog.index');
+    Route::get('blog/{post}', [BlogController::class, 'show'])->name('blog.show');
 });
 
 
